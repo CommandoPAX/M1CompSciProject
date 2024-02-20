@@ -1,1 +1,3 @@
-# M1CompSciProject
+# Hydrodynamics : Shock Tube and Riemann Solvers
+
+## Code Architecture
