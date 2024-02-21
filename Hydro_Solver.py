@@ -5,10 +5,7 @@ from Core.Physics import *
 from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
 
-if __name__ == "__main__" :
-
-    # We generate the space in which we'll work and we intialize all useful variables as 0 over this space
-    config = Config_Loader()
+def NewConfig ():
     Create_New_Config = input("Do you wish to create a new config file (y/n) ? ")
     
     if Create_New_Config == "y" or Create_New_Config == "Y" : #Currently doesn't work, didn't have time to finish before having to leave
@@ -21,6 +18,12 @@ if __name__ == "__main__" :
         # P = 
         #config.generate_new_config(gamma, L, n_cell, C, rho, u, P, "New_Config")
 
+
+if __name__ == "__main__" :
+
+    # We generate the space in which we'll work and we intialize all useful variables as 0 over this space
+    config = Config_Loader()
+    
     X = np.linspace(0,1,num=config.DATA["n_cell"])
     
     rho = np.zeros(config.DATA["n_cell"])
