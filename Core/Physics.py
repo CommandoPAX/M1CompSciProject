@@ -6,6 +6,7 @@ from Core.Error_Handler import LogError
 
 config = Config_Loader()
 gamma = config.DATA["gamma"]
+n_cell = config.DATA["n_cell"]
 
 def P_(rho : np.array, K : float) :
     """ 
@@ -34,9 +35,9 @@ def U_(rho : np.array, u : np.array, P : np.array):
     Computes the array of conserved quantities as defined on page 1 of the subject
     """
     
-    global gamma
+    global gamma, n_cell
 
-    Result = np.zeros(n_cell,3)
+    Result = np.zeros((n_cell,3))
     for i in range(n_cell):
               Result[i][0] = rho[i]
               Result[i][1] = (rho*u)[i]
