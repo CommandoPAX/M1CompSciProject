@@ -13,4 +13,4 @@ def F12_Friedrich (U, dx, dt):
 
     for i in range(3):
         for j in range(n_cell) :
-            R[i][j] = 0.5*(F(U[i][j]+F(U[i][j+1]))+0.5*dx/dt*(U[i][j]-U[i][j+1])
+            R[i][j] = 0.5*(F(U[i][j])+F(U[i][j+1]))+0.5*dx/dt*(U[i][j]-U[i][j+1])
