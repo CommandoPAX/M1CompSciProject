@@ -48,7 +48,7 @@ if __name__ == "__main__" :
     P[n_cell//2:] = config.DATA["P_sup"]        
     
     U = U_(rho,u,P)
-    for i in range(100):
+    for i in range(31):
         U = U_next(U,X)
 
     # Plots the initial conditions only for now
@@ -57,7 +57,11 @@ if __name__ == "__main__" :
     u = U[:,1]
     P = U[:,2]
 
-    print(rho.shape)
+    plt.plot(X,P)
+    print(rho)
+    plt.show()
+
+    print(X.shape, rho.shape)
 
     W = W_(rho, u, P)    
-    Create_Plots(X,W)
+    #Create_Plots(X,W)
