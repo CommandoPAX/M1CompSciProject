@@ -26,22 +26,22 @@ if __name__ == "__main__" :
     config = Config_Loader()
     n_cell = config.DATA["n_cell"]
 
-    X = np.linspace(0,1,num=config.DATA["n_cell"])
+    X = np.linspace(0,1,num=n_cell)
     
-    rho = np.zeros(config.DATA["n_cell"])
-    u = np.zeros(config.DATA["n_cell"])
-    P = np.zeros(config.DATA["n_cell"])
+    rho = np.zeros(n_cell)
+    u = np.zeros(n_cell)
+    P = np.zeros(n_cell)
 
     # Load all initial conditions
     # To change initial conditions, change config name in Core/Config_Loader.py
 
-    rho[:config.DATA["n_cell"]//2] = config.DATA["rho_inf"]
-    u[:config.DATA["n_cell"]//2] = config.DATA["u_inf"]
-    P[:config.DATA["n_cell"]//2] = config.DATA["P_inf"]
+    rho[:n_cell//2] = config.DATA["rho_inf"]
+    u[:n_cell//2] = config.DATA["u_inf"]
+    P[:n_cell//2] = config.DATA["P_inf"]
         
-    rho[config.DATA["n_cell"]//2:] = config.DATA["rho_sup"]
-    u[config.DATA["n_cell"]//2:] = config.DATA["u_sup"]
-    P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]        
+    rho[n_cell//2:] = config.DATA["rho_sup"]
+    u[n_cell//2:] = config.DATA["u_sup"]
+    P[n_cell//2:] = config.DATA["P_sup"]        
     
     U = U_(rho,u,P)
     print(U.shape)

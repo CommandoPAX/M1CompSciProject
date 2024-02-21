@@ -9,7 +9,7 @@ config = Config_Loader()
 
 def F12_Friedrich (U, X, dt):
 
-    n_cell = config.DATA["n_cell"]
+    n_cell = n_cell
 
     R = np.zeros((3,n_cell))
     dx = X[1]-X[0]
