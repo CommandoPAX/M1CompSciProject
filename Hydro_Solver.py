@@ -51,7 +51,7 @@ if __name__ == "__main__" :
     for i in range(100):
         U = U_next(U,X)
 
-    # Plots the initial conditions only for now
+    # TEST
 
     rho = U[:,0]
     u = U[:,1]
