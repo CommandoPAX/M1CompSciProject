@@ -44,6 +44,7 @@ if __name__ == "__main__" :
     P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]        
     
     U = U_(rho,u,P)
+    print(U.shape)
     F12_Friedrich(U,X,0.01)
 
     
