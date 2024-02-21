@@ -53,5 +53,11 @@ if __name__ == "__main__" :
 
     # Plots the initial conditions only for now
 
+    rho = U[:,0]
+    u = U[:,1]
+    P = U[:,2]
+
+    print(rho.shape)
+
     W = W_(rho, u, P)    
     Create_Plots(X,W)
