@@ -12,17 +12,20 @@ config = Config_Loader()
 
 if __name__ == "__main__" :
 
-    # Conditions initiales
-
-    #Théo : faudra l'implémenter avec une config modifiable, je m'en occuperai c'est pas très compliqué
-
     X = np.linspace(0,1,num=config["n_cell"])
+    
+    rho = np.zeros(config.DATA["n_cell"])
+    u = np.zeros(config.DATA["n_cell"])
+    P = np.zeros(config.DATA["n_cell"])
 
-    rho = np.ones(config.DATA["n_cell"])
-    u=np.zeros(config.DATA["n_cell"])
-    P = np.ones(config.DATA["n_cell"])
-    rho[config.DATA["n_cell"]//2:] = 0.125
-    P[config.DATA["n_cell"]//2:] = 0.1
+    # Load all initial conditions
+    rho[:config.DATA["n_cell"]//2] = config.DATA["rho_inf"]
+    u[:config.DATA["n_cell"]//2] = config.DATA["u_inf"]
+    P[:config.DATA["n_cell"]//2] = config.DATA["P_inf"]
+    
+    rho[config.DATA["n_cell"]//2:] = config.DATA["rho_sup"]
+    u[config.DATA["n_cell"]//2:] = config.DATA["u_sup"]
+    P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]
 
     W = W_(rho, u, P)    
 
