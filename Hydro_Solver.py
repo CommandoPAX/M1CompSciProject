@@ -4,6 +4,7 @@ import numpy as np
 from Core.Physics import *
 from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
+from Flux_Solver.Lax_Friedrich import*
 
 def NewConfig ():
     Create_New_Config = input("Do you wish to create a new config file (y/n) ? ")
@@ -23,7 +24,7 @@ if __name__ == "__main__" :
 
     # We generate the space in which we'll work and we intialize all useful variables as 0 over this space
     config = Config_Loader()
-    
+
     X = np.linspace(0,1,num=config.DATA["n_cell"])
     
     rho = np.zeros(config.DATA["n_cell"])
@@ -39,7 +40,11 @@ if __name__ == "__main__" :
         
         rho[config.DATA["n_cell"]//2:] = config.DATA["rho_sup"]
         u[config.DATA["n_cell"]//2:] = config.DATA["u_sup"]
-        P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]
+        P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]        
+    
+        U = U_(rho,u,P)
+        F12_Friedrich(U,dx,dt)
+
     except Exception as e :
             LogError("Initalizing_Conditions", e)
             print(e)
