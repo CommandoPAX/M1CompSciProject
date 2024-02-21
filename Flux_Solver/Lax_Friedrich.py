@@ -9,13 +9,13 @@ config = Config_Loader()
 
 def F12_Friedrich (U, X, dt):
 
-    n_cell = n_cell
+    global n_cell
 
     R = np.zeros((3,n_cell))
     dx = X[1]-X[0]
 
     print(U.shape)
 
-    for i in range(3):
-        for j in range(n_cell) :
+    for i in range(n_cell):
+        for j in range(3) :
             if j+1 <n_cell : R[i][j] = 0.5*(F_(U[i][j])+F_(U[i][j+1]))+0.5*dx/dt*(U[i][j]-U[i][j+1])
