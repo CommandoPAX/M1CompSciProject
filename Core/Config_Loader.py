@@ -26,12 +26,12 @@ class Config_Loader() :
             NewConfig["L"] = L
             NewConfig["n_cell"] = n_cell 
             NewConfig["C"] = C 
-            NewConfig["rho_inf"] = rho[0]
-            NewConfig["rho_sup"] = rho[1]
-            NewConfig["u_inf"] = u[0]
-            NewConfig["u_sup"] = u[1]
-            NewConfig["P_inf"] = P[0]
-            NewConfig["P_sup"] = P[1]
+            NewConfig["rho_inf"] = float(rho[0])
+            NewConfig["rho_sup"] = float(rho[1])
+            NewConfig["u_inf"] = float(u[0])
+            NewConfig["u_sup"] = float(u[1])
+            NewConfig["P_inf"] = float(P[0])
+            NewConfig["P_sup"] = float(P[1])
             
             self.DATA = NewConfig
             
