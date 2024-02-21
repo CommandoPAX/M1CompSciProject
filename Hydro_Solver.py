@@ -5,6 +5,7 @@ from Core.Physics import *
 from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
 from Flux_Solver.Lax_Friedrich import*
+from Core.Conservative_State_Solver import*
 
 def NewConfig ():
     Create_New_Config = input("Do you wish to create a new config file (y/n) ? ")
@@ -47,10 +48,9 @@ if __name__ == "__main__" :
     P[n_cell//2:] = config.DATA["P_sup"]        
     
     U = U_(rho,u,P)
-    print(U.shape)
-    F12_Friedrich(U,X,0.01)
+    for i in range(100):
+        U = U_next(U,0,X)
 
-    
     # Plots the initial conditions only for now
 
     W = W_(rho, u, P)    

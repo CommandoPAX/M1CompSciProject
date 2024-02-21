@@ -23,4 +23,5 @@ def U_next(U : np.array, FluxIntercell : np.array, X) :
     With this convention, U[:, 0] is every density, U[:, 1] every speed, U[:, 2] every pressure
     """
     i = 0 #Placeholder while waiting for the intercell flux function
-    return np.array(U + (delta_t(U[:, 1], a_(U[:, 2], U[:, 0]))/dx)*(F12_Friedrich(U,X,dt,signe="-") - F12_Friedrich(U,X,dt,signe="+")))
+    dx = X[1]-X[0]
+    return np.array(U + (delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)/dx)*(F12_Friedrich(U,X,dt,signe="-") - F12_Friedrich(U,X,dt,signe="+")))
