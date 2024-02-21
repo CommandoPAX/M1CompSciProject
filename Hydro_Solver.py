@@ -47,9 +47,15 @@ if __name__ == "__main__" :
     u[n_cell//2:] = config.DATA["u_sup"]
     P[n_cell//2:] = config.DATA["P_sup"]        
     
+    Ttot = 0
+
     U = U_(rho,u,P)
-    for i in range(100):
+    dx = X[1]-X[0]
+    while 1 :
+        Ttot += delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)
+        print(Ttot)
         U = U_next(U,X)
+        if Ttot > 0.25 : break
 
     # TEST
 
