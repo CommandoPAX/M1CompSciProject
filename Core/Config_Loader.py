@@ -16,7 +16,9 @@ class Config_Loader() :
             LogError("Config_Loader.__init__", e)
             print(e)
             
-    def generate_new_config(self, gamma : float, L : float, n_cell : int, C : float, rho : list, u : list, P : list, output_name : str) :
+    def generate_new_config(self, gamma : float, L : float, n_cell : int, C : float,
+                            rho_inf : float, rho_sup : float, u_inf : float,
+                            u_sup : float, P_inf : float, P_sup : float, output_name : str) :
         """ 
         Generates a new config from a given list of parameters and saves it
         """
@@ -26,12 +28,12 @@ class Config_Loader() :
             NewConfig["L"] = L
             NewConfig["n_cell"] = n_cell 
             NewConfig["C"] = C 
-            NewConfig["rho_inf"] = float(rho[0])
-            NewConfig["rho_sup"] = float(rho[1])
-            NewConfig["u_inf"] = float(u[0])
-            NewConfig["u_sup"] = float(u[1])
-            NewConfig["P_inf"] = float(P[0])
-            NewConfig["P_sup"] = float(P[1])
+            NewConfig["rho_inf"] = rho_inf 
+            NewConfig["rho_sup"] = rho_sup 
+            NewConfig["u_inf"] = u_inf 
+            NewConfig["u_sup"] = u_sup 
+            NewConfig["P_inf"] = P_inf
+            NewConfig["P_sup"] = P_sup
             
             self.DATA = NewConfig
             
