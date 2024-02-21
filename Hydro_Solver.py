@@ -1,18 +1,14 @@
 # Main file to execute rest of the code
 
 import numpy as np
-import matplotlib.pyplot as plt
-import os
 from tkinter import*
 from math import*
-import sys
-import json
 
 from Core.Variables import *
 from Core.Plot_Handler import *
+from Core.Config_Loader import Config_Loader
 
-with open("./Config/Default_Config.json", "r") as f :
-    config = json.load(f)
+config = Config_Loader()
 
 if __name__ == "__main__" :
 
@@ -22,11 +18,11 @@ if __name__ == "__main__" :
 
     X = np.linspace(0,1,num=config["n_cell"])
 
-    rho = np.ones(config["n_cell"])
-    u=np.zeros(config["n_cell"])
-    P = np.ones(config["n_cell"])
-    rho[config["n_cell"]//2:] = 0.125
-    P[config["n_cell"]//2:] = 0.1
+    rho = np.ones(config.DATA["n_cell"])
+    u=np.zeros(config.DATA["n_cell"])
+    P = np.ones(config.DATA["n_cell"])
+    rho[config.DATA["n_cell"]//2:] = 0.125
+    P[config.DATA["n_cell"]//2:] = 0.1
 
     W = W_(rho, u, P)    
 

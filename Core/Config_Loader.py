@@ -2,5 +2,9 @@
 
 import json
 
-with open("./Config/Default_Config.json", "r") as f :
-    config = json.load(f)
+# Version basique, faudra l'améliorer
+
+class Config_Loader() :
+    def __init__(self) : 
+        with open("./Config/Default_Config.json", "r") as f :
+            self.DATA = json.load(f)

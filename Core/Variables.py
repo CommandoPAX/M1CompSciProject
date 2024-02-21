@@ -1,10 +1,11 @@
 # All main variables
 
 import numpy as np
-import json 
 
-with open("./Config/Default_Config.json", "r") as f :
-    config = json.load(f)
+from Core.Config_Loader import Config_Loader
+
+config = Config_Loader()
+gamma= config.DATA["gamma"]
 
 def P_(rho, K) :
     global gamma
