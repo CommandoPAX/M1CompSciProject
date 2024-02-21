@@ -4,13 +4,16 @@ import numpy as np
 from Core.Config_Loader import Config_Loader
 from Core.Physics import*
 
-def F12_Friedrich (U : np.array, X : np.array, dt : float, signe : str ="+"):
+config = Config_Loader()
+n_cell = config.DATA["n_cell"]
     
-    config = Config_Loader()
-    n_cell = config.DATA["n_cell"]
+
+def F12_Friedrich (U : np.array, dx, dt : float, signe : str ="+"):
     
+    global n_cell
+
     R = np.zeros((n_cell,3))
-    dx = X[1]-X[0]
+    dx
 
 
     if signe == "+":
