@@ -53,7 +53,7 @@ if __name__ == "__main__" :
     dx = X[1]-X[0]
     while 1 :
         Ttot += delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)
-        print(Ttot)
+        #print(Ttot)
         U = U_next(U,dx)
         if Ttot > 0.25 : break
 
