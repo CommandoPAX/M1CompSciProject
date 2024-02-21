@@ -1,7 +1,7 @@
 # Main file to execute rest of the code
 
 import numpy as np
-from Core.Variables import *
+from Core.Physics import *
 from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
 

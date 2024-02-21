@@ -1,7 +1,7 @@
 # Handles creating every plot
 
 import matplotlib.pyplot as plt 
-from Core.Variables import *
+from Core.Physics import *
 
 def Create_Plots(X : np.array, W : np.array, output : str = "GRAPHIQUE"):
     """ 
