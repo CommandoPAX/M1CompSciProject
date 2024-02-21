@@ -11,21 +11,24 @@ gamma = 1.4
 L = 1 #longueur du tube en mètres
 n_cell = 10000
 
-def P(rho, K) :
+def P_(rho, K) :
     global gamma
     return K * np.pow(rho,gamma)
 
-def a (P, rho):
+def a_ (P, rho):
     global gamma
     return np.sqrt(gamma*P/rho)
 
-def U(rho, u, P):
+def U_(rho, u, P):
     global gamma
     return np.array([rho, rho*u, 0.5*rho*u**2+P/(gamma-1)])
 
-def F(U_):
+def F_(U):
     global gamma
-    return np.array([U_[0], 0.5*(3-gamma)*U_[1]**2/U[0]+(gamma-1)*U_[2], U_[1]/U_[0]*U_[2]-0.5*(gamma-1)*U_[1]**3/U_[0]**2])
+    return np.array([U[0], 0.5*(3-gamma)*U[1]**2/U[0]+(gamma-1)*U[2], U[1]/U[0]*U[2]-0.5*(gamma-1)*U[1]**3/U[0]**2])
+
+def W_(rho, u, P):
+    return np.array(rho, u, P)
 
 if __name__ == "__main__" :
 
@@ -40,3 +43,4 @@ if __name__ == "__main__" :
     rho[n_cell//2:] = 0.125
     P[n_cell//2:] = 0.1
 
+    W = W_ (rho, u, P)    
