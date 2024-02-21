@@ -43,7 +43,7 @@ if __name__ == "__main__" :
         P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]        
     
         U = U_(rho,u,P)
-        F12_Friedrich(U,dx,dt)
+        F12_Friedrich(U,X,0.01)
 
     except Exception as e :
             LogError("Initalizing_Conditions", e)

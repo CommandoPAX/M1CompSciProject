@@ -4,11 +4,11 @@ import numpy as np
 from Core.Config_Loader import Config_Loader
 from Core.Error_Handler import LogError
 
-config = Config_Loader()
-
-def F12_Friedrich (U, dx, dt):
+def F12_Friedrich (U, X, dt):
     global n_cell
     R = np.zeros(n_cell,3)
+    dx = X[1]-X[0]
+
     print(R.shape())
 
     for i in range(3):
