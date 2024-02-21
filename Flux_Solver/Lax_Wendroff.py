@@ -2,12 +2,11 @@
 
 import numpy as np
 from Core.Config_Loader import Config_Loader
-from Core.Error_Handler import LogError
-from Core.Conservative_State_Solver import*
+from Core.Physics import *
 
 config = Config_Loader()
 
-def F12_Friedrich (U, dx, dt):
+def F12_Wendroff (U : np.array, X : np.array, dt : float):
     
     n_cell = config.DATA["n_cell"]
     
@@ -15,6 +14,7 @@ def F12_Friedrich (U, dx, dt):
     R2=np.zeros((3,n_cell))
     R=np.zeros((3,n_cell))
     
+    dx = X[1] - X[0]
     
     for i in range(n_cell-1):
         if i==0:

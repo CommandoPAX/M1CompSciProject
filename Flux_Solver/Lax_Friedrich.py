@@ -2,16 +2,13 @@
 
 import numpy as np
 from Core.Config_Loader import Config_Loader
-from Core.Error_Handler import LogError
-from Core.Conservative_State_Solver import*
 from Core.Physics import*
 
-config = Config_Loader()
-
-def F12_Friedrich (U, X, dt, signe="+"):
-
-    global n_cell
-
+def F12_Friedrich (U : np.array, X : np.array, dt : float, signe : str ="+"):
+    
+    config = Config_Loader()
+    n_cell = config.DATA["n_cell"]
+    
     R = np.zeros((n_cell,3))
     dx = X[1]-X[0]
 
