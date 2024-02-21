@@ -2,7 +2,6 @@
 
 import numpy as np
 from Core.Config_Loader import Config_Loader
-from Core.Error_Handler import LogError
 
 config = Config_Loader()
 gamma = config.DATA["gamma"]
@@ -12,24 +11,16 @@ def P_(rho : np.array, K : float) :
     """ 
     Computes the pressure using the polytropic equation of state with explonent gamma
     """
-    try :
-        global gamma
-        return K * np.pow(rho,gamma)
-    except Exception as e :
-            LogError("P_", e)
-            print(e)
+    global gamma
+    return K * np.pow(rho,gamma)
 
 def a_(P : np.array, rho : np.array):
     """ 
     Computes the speed of sound as defined on page 1 of the subject
     """
-    try :
-        global gamma
-        return np.sqrt(gamma*P/rho)
-    except Exception as e :
-            LogError("a_", e)
-            print(e)
-
+    global gamma
+    return np.sqrt(gamma*P/rho)
+    
 def U_(rho : np.array, u : np.array, P : np.array):
     """ 
     Computes the array of conserved quantities as defined on page 1 of the subject
@@ -39,9 +30,9 @@ def U_(rho : np.array, u : np.array, P : np.array):
 
     Result = np.zeros((n_cell,3))
     for i in range(n_cell):
-              Result[i][0] = rho[i]
-              Result[i][1] = (rho*u)[i]
-              Result[i][2] = (0.5*rho*u**2+P/(gamma-1))[i]
+              Result[i, 0] = rho[i]
+              Result[i, 1] = (rho*u)[i]
+              Result[i, 2] = (0.5*rho*u**2+P/(gamma-1))[i]
 
     return Result
  
@@ -49,12 +40,8 @@ def W_(rho : np.array, u : np.array, P : np.array):
     """ 
     Returns an array of the primitive quantities
     """
-    try :
-        return np.array([rho, u, P])
-    except Exception as e :
-            LogError("W_", e)
-            print(e)
-
+    return np.array([rho, u, P])
+    
 def delta_t(u : np.array, a : np.array, dx : float) :
     """
     Computes the next timestep used for the calculations, using the following arguments :
@@ -63,34 +50,26 @@ def delta_t(u : np.array, a : np.array, dx : float) :
     - dx is the distance between two cells
     """
     config = Config_Loader()
-    try :
-        S_max= np.max(np.absolute(u) + a)
-        return (config.DATA["C"] * dx)/(S_max) # Returns the time step value to be used by Conservative_State_Solver.py
-    except Exception as e :
-            LogError("delta_t_", e)
-            print(e)
-
+    S_max= np.max(np.absolute(u) + a)
+    return (config.DATA["C"] * dx)/(S_max) # Returns the time step value to be used by Conservative_State_Solver.py
+    
 def derivee (f, x : np.array):
     """ 
     Computes a simple derivative using transmissive boundary conditions
     """
     config = Config_Loader()
-    try : 
-        y = f(x)
-        dx = x[1]-x[0]
-        yp = np.zeros(n_cell)
-        for i in range(len(x)):
-            if i >=1 and i+1 < len(x) : 
-                yp[i] = (y[i-1]+y[i+1])/(2*dx)
+    y = f(x)
+    dx = x[1]-x[0]
+    yp = np.zeros(n_cell)
+    for i in range(len(x)):
+        if i >=1 and i+1 < len(x) : 
+            yp[i] = (y[i-1]+y[i+1])/(2*dx)
 
-            # Transmissive boundary condition
+        # Transmissive boundary condition
 
-            if i == 0 :
-                yp[i] = (y[0]+y[1])/(2*dx)
-            if i+1 == len(x) : 
-                yp[i] = (y[i-1]+y[i])/(2*dx)
+        if i == 0 :
+            yp[i] = (y[0]+y[1])/(2*dx)
+        if i+1 == len(x) : 
+            yp[i] = (y[i-1]+y[i])/(2*dx)
 
         return yp
-    except Exception as e :
-            LogError("derivee_", e)
-            print(e)
