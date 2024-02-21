@@ -6,5 +6,5 @@ import json
 
 class Config_Loader() :
     def __init__(self) : 
-        with open("./Config/Default_Config.json", "r") as f :
+        with open("./Config/Sod_Problem.json", "r") as f :
             self.DATA = json.load(f)

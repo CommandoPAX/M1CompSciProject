@@ -1,6 +1,7 @@
 # Handles creating every plot
 
 import matplotlib.pyplot as plt 
+from Core.Variables import *
 
 def Create_Plots(X, W, output = "GRAPHIQUE"):
 
@@ -32,7 +33,7 @@ def Create_Plots(X, W, output = "GRAPHIQUE"):
     axes.set_xlabel("X [m]")
     axes.set_ylabel("U2")
 
-    U = U(W[0],W[1],W[2])
+    U = U_(W[0],W[1],W[2])
 
     axes.plot(X,U[2], label="Internal energy")
     axes.legend()
