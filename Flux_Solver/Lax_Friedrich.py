@@ -18,3 +18,5 @@ def F12_Friedrich (U, X, dt):
 
     for i in range(n_cell):
         if i+1 <n_cell : R[i] = 0.5*(F_(U[i])+F_(U[i+1]))+0.5*dx/dt*(U[i]-U[i+1])
+
+    return R
