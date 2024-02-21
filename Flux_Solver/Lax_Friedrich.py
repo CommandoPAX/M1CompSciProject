@@ -11,11 +11,12 @@ def F12_Friedrich (U, X, dt):
 
     global n_cell
 
-    R = np.zeros((3,n_cell))
+    R = np.zeros((n_cell,3))
     dx = X[1]-X[0]
 
-    print(U.shape)
+    print(U[0].shape)
 
     for i in range(n_cell):
-        for j in range(3) :
-            if j+1 <n_cell : R[i][j] = 0.5*(F_(U[i][j])+F_(U[i][j+1]))+0.5*dx/dt*(U[i][j]-U[i][j+1])
+        if i+1 <n_cell : R[i] = 0.5*(F_(U[i])+F_(U[i+1]))+0.5*dx/dt*(U[i]-U[i+1])
+
+    return R
