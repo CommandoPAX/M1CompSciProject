@@ -10,14 +10,17 @@ def NewConfig ():
     Create_New_Config = input("Do you wish to create a new config file (y/n) ? ")
     
     if Create_New_Config == "y" or Create_New_Config == "Y" : #Currently doesn't work, didn't have time to finish before having to leave
-        Gamma = float(input("Gamma ? "))
-        L = float(input("L ? "))
-        n_cell = int(input("n_cell ? "))
-        C = float(input("C ? "))
-        # rho = list(input())
-        # u = 
-        # P = 
-        #config.generate_new_config(gamma, L, n_cell, C, rho, u, P, "New_Config")
+        _Gamma = float(input("Gamma ? "))
+        _L = float(input("L ? "))
+        _n_cell = int(input("n_cell ? "))
+        _C = float(input("C ? "))
+        _rho_inf = float(input("rho_inf ? "))
+        _rho_sup = float(input("rho_sup ? "))
+        _u_inf = float(input("u_inf ? "))
+        _u_sup = float(input("u_sup ? "))
+        _P_inf = float(input("P_inf ? "))
+        _P_sup = float(input("P_sup ? "))
+        config.generate_new_config(_Gamma, _L, _n_cell, _C, _rho_inf, _rho_sup, _u_inf, _u_sup, _P_inf, _P_sup, "New_Config")
 
 
 if __name__ == "__main__" :
