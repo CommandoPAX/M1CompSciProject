@@ -3,6 +3,7 @@
 import numpy as np
 from Core.Error_Handler import LogError
 from Core.Config_Loader import *
+from Core.Physics import *
 
 def F_(U : np.array):
     """ 
@@ -16,5 +17,5 @@ def F_(U : np.array):
             LogError("F_", e)
             print(e)
             
-def U_next(U : np.array, FluxIntercell : np.array) : 
-    return 
+def U_next(U : np.array, FluxIntercell : np.array, dx : float) : 
+    return np.array(U + (delta_t(U[:, 1], a_(U[:, 2], U[:, 0]))/dx)*(FluxIntercell(i-1/2) + FluxIntercell(i+1/2)))
