@@ -43,8 +43,7 @@ def F_(U : np.array):
     """ 
     Computes the flux function as defined on page 1 of the subject
     """
-    config = Config_Loader()
-    gamma = config.DATA["gamma"]
+    global gamma
     
     return np.array([U[0], 0.5*(3-gamma)*U[1]**2/U[0]+(gamma-1)*U[2], U[1]/U[0]*U[2]-0.5*(gamma-1)*U[1]**3/U[0]**2])
 
