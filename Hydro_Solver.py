@@ -18,7 +18,7 @@ if __name__ == "__main__" :
     P = np.zeros(config.DATA["n_cell"])
 
     # Load all initial conditions
-    # To change initial conditions, change path in Core/Config_Loader.py
+    # To change initial conditions, change config name in Core/Config_Loader.py
     rho[:config.DATA["n_cell"]//2] = config.DATA["rho_inf"]
     u[:config.DATA["n_cell"]//2] = config.DATA["u_inf"]
     P[:config.DATA["n_cell"]//2] = config.DATA["P_inf"]
