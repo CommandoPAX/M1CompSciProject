@@ -37,8 +37,8 @@ def Create_Plots(X : np.array, W : np.array, output : str = "GRAPHIQUE"):
     axes = fig.add_subplot(224)
     axes.set_xlabel("X [m]")
     axes.set_ylabel("U2")
-    U = U_(W[0],W[1],W[2])
-    axes.plot(X,U[2], label="Internal energy")
+    U = U_(W[:,0],W[:,1],W[:,2])
+    axes.plot(X,U[:,2], label="Internal energy")
     axes.legend()
     
     # Saves and shows the plots
