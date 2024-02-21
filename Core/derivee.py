@@ -1,7 +1,12 @@
+# Handles computing derivative
+
 import numpy as np
 from Core.Config_Loader import Config_Loader
 
-def derivee (f, x : np.array):
+def derivee (f : function, x : np.array):
+    """ 
+    Computes a simple derivative using transmissive boundary conditions
+    """
     config = Config_Loader()
     y = f(x)
     dx = x[1]-x[0]

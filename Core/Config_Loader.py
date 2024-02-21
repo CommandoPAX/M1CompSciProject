@@ -2,9 +2,10 @@
 
 import json
 
-# Version basique, faudra l'améliorer
-
 class Config_Loader() :
+    """ 
+    Loads the config for a given problem to be used by other files
+    """
     def __init__(self) : 
         self.Config_Name = "Sod_Problem"
         with open(f"./Config/{self.Config_Name}.json", "r") as f :
