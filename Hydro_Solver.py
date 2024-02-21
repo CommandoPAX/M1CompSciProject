@@ -49,7 +49,7 @@ if __name__ == "__main__" :
     
     U = U_(rho,u,P)
     for i in range(100):
-        U = U_next(U,0,X)
+        U = U_next(U,X)
 
     # Plots the initial conditions only for now
 
