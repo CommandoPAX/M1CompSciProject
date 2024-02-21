@@ -65,7 +65,7 @@ def delta_t(u : np.array, a : np.array, dx : float) :
             LogError("delta_t_", e)
             print(e)
 
-def derivee (f : function, x : np.array):
+def derivee (f, x : np.array):
     """ 
     Computes a simple derivative using transmissive boundary conditions
     """
