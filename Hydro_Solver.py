@@ -24,6 +24,7 @@ if __name__ == "__main__" :
 
     # We generate the space in which we'll work and we intialize all useful variables as 0 over this space
     config = Config_Loader()
+    n_cell = config.DATA["n_cell"]
 
     X = np.linspace(0,1,num=config.DATA["n_cell"])
     
@@ -33,21 +34,18 @@ if __name__ == "__main__" :
 
     # Load all initial conditions
     # To change initial conditions, change config name in Core/Config_Loader.py
-    try :
-        rho[:config.DATA["n_cell"]//2] = config.DATA["rho_inf"]
-        u[:config.DATA["n_cell"]//2] = config.DATA["u_inf"]
-        P[:config.DATA["n_cell"]//2] = config.DATA["P_inf"]
-        
-        rho[config.DATA["n_cell"]//2:] = config.DATA["rho_sup"]
-        u[config.DATA["n_cell"]//2:] = config.DATA["u_sup"]
-        P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]        
-    
-        U = U_(rho,u,P)
-        F12_Friedrich(U,dx,dt)
 
-    except Exception as e :
-            LogError("Initalizing_Conditions", e)
-            print(e)
+    rho[:config.DATA["n_cell"]//2] = config.DATA["rho_inf"]
+    u[:config.DATA["n_cell"]//2] = config.DATA["u_inf"]
+    P[:config.DATA["n_cell"]//2] = config.DATA["P_inf"]
+        
+    rho[config.DATA["n_cell"]//2:] = config.DATA["rho_sup"]
+    u[config.DATA["n_cell"]//2:] = config.DATA["u_sup"]
+    P[config.DATA["n_cell"]//2:] = config.DATA["P_sup"]        
+    
+    U = U_(rho,u,P)
+    F12_Friedrich(U,X,0.01)
+
     
     # Plots the initial conditions only for now
 
