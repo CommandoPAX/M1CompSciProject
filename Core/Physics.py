@@ -29,10 +29,13 @@ def U_(rho : np.array, u : np.array, P : np.array):
     global gamma, n_cell
 
     Result = np.zeros((n_cell,3))
-    for i in range(n_cell):
+    Result[:, 0] = rho[:]
+    Result[:, 1] = rho[:] * u[:] 
+    Result[:,2] = (0.5*rho[:]*u[:]**2+P[:]/(gamma-1))
+    """for i in range(n_cell):
               Result[i, 0] = rho[i]
               Result[i, 1] = (rho*u)[i]
-              Result[i, 2] = (0.5*rho*u**2+P/(gamma-1))[i]
+              Result[i, 2] = (0.5*rho*u**2+P/(gamma-1))[i]"""
 
     return Result
  
@@ -50,7 +53,14 @@ def W_(rho : np.array, u : np.array, P : np.array):
     """ 
     Returns an array of the primitive quantities
     """
-    return np.array([rho, u, P])
+    global n_cell 
+    
+    Arr = np.zeros((n_cell, 3))
+    Arr[:, 0] = rho 
+    Arr[:, 1] = u 
+    Arr[:, 2] = P 
+    return Arr
+    #return np.array([rho, u, P])
     
 def delta_t(u : np.array, a : np.array, dx : float) :
     """
