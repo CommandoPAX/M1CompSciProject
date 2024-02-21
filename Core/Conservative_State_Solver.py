@@ -18,4 +18,7 @@ def F_(U : np.array):
             print(e)
             
 def U_next(U : np.array, FluxIntercell : np.array, dx : float) : 
+    """
+    Uses the state of the physical system at a time t to calculate the state at the time t + delta_t
+    """
     return np.array(U + (delta_t(U[:, 1], a_(U[:, 2], U[:, 0]))/dx)*(FluxIntercell(i-1/2) + FluxIntercell(i+1/2)))
