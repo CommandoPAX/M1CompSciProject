@@ -18,9 +18,9 @@ def Create_Plots(X : np.array, W : np.array, output : str = "GRAPHIQUE"):
 
     fig = plt.figure()
 
-    rho = W[0]
-    u = W[1]
-    P = W[2]
+    rho = W[:,0]
+    u = W[:,1]
+    P = W[:,2]
     U_int = 0.5*rho*u**2+P/(gamma-1)
 
     # Density

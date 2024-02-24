@@ -43,13 +43,19 @@ def U_(rho : np.array, u : np.array, P : np.array):
 def U_a_la_moins_un (U):
     #### Inverse U_
 
-    global gamma
+    global gamma,n_cell
 
-    rho = U[0]
-    u = U[1]/rho
-    P = (U-0.5*rho*u**2)*(gamma-1)
+    Result = np.zeros((n_cell,3))
 
-    return rho,u,P
+    rho = U[:,0]
+    u = U[:,1]/rho
+    P = (U[:,2]-0.5*rho*u**2)*(gamma-1)
+
+    Result[:,0]=rho
+    Result[:,1]=u
+    Result[:,2]=P
+
+    return Result
 
 def F_(U : np.array):
     """ 
