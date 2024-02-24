@@ -40,7 +40,7 @@ def U_(rho : np.array, u : np.array, P : np.array):
 
     return Result
 
- def U_a_la_moins_un (U):
+def U_a_la_moins_un (U):
     #### Inverse U_
 
     global gamma
