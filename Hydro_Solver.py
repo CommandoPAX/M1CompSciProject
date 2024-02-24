@@ -59,9 +59,6 @@ if __name__ == "__main__" :
 
     # TEST
 
-    rho = U[:,0]
-    u = U[:,1]
-    P = U[:,2]
-
-    W = W_(rho, u, P)    
+    W = U_a_la_moins_un(U)
+  
     Create_Plots(X,W)
