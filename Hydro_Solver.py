@@ -59,6 +59,6 @@ if __name__ == "__main__" :
 
     # TEST
 
-    W = U_a_la_moins_un(U)
+    Resultat = U_a_la_moins_un(U)
   
-    Create_Plots(X,W)
+    Create_Plots(X,Resultat)

@@ -49,7 +49,7 @@ def U_a_la_moins_un (U):
     u = U[1]/rho
     P = (U-0.5*rho*u**2)*(gamma-1)
 
-    return np.array([rho,u,P])
+    return rho,u,P
 
 def F_(U : np.array):
     """ 
