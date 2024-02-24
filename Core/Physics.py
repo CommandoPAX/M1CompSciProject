@@ -39,7 +39,16 @@ def U_(rho : np.array, u : np.array, P : np.array):
               Result[i, 2] = (0.5*rho*u**2+P/(gamma-1))[i]"""
 
     return Result
- 
+
+ def U_a_la_moins_un (U):
+    #### Inverse U_
+
+    global gamma
+
+    rho = U[0]
+    u = U[1]/rho
+    P = (U-0.5*rho*u**2)*(gamma-1)
+
 def F_(U : np.array):
     """ 
     Computes the flux function as defined on page 1 of the subject
