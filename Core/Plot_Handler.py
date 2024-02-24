@@ -21,7 +21,7 @@ def Create_Plots(X : np.array, W : np.array, output : str = "GRAPHIQUE"):
     rho = W[:,0]
     u = W[:,1]
     P = W[:,2]
-    U_int = 0.5*rho*u**2+P/(gamma-1)
+    U_int =  2*(P/rho)
 
     # Density
     axes = fig.add_subplot(221)
