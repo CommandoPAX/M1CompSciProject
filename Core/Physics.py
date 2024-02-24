@@ -30,9 +30,9 @@ def U_(rho : np.array, u : np.array, P : np.array):
     global gamma, n_cell
 
     Result = np.zeros((n_cell,3))
-    Result[:, 0] = rho[:]
-    Result[:, 1] = rho[:] * u[:] 
-    Result[:,2] = (0.5*rho[:]*u[:]**2+P[:]/(gamma-1))
+    Result[:, 0] = rho
+    Result[:, 1] = rho * u
+    Result[:,2] = (0.5*rho*u**2+P/(gamma-1))
     """for i in range(n_cell):
               Result[i, 0] = rho[i]
               Result[i, 1] = (rho*u)[i]
