@@ -47,7 +47,7 @@ def Create_Plots(X : np.array, W : np.array, output : str = "GRAPHIQUE"):
     # Internal Energy
     axes = fig.add_subplot(224)
     axes.set_xlabel("X [m]")
-    axes.set_ylabel("U2")
+    axes.set_ylabel("U_int")
     axes.plot(X,U_int, label="Internal energy")
     axes.legend()
     
