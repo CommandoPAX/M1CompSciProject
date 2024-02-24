@@ -63,7 +63,7 @@ def F_(U : np.array):
     """
     global gamma
     
-    return np.array([U[0], 0.5*(3-gamma)*U[1]**2/U[0]+(gamma-1)*U[2], U[1]/U[0]*U[2]-0.5*(gamma-1)*U[1]**3/U[0]**2])
+    return np.array([U[1], 0.5*(3-gamma)*U[1]**2/U[0]+(gamma-1)*U[2], gamma*U[1]/U[0]*U[2]-0.5*(gamma-1)*U[1]**3/U[0]**2])
 
 
 def W_(rho : np.array, u : np.array, P : np.array):
