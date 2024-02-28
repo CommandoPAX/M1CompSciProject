@@ -120,9 +120,12 @@ def PREFUN(F, FD, P, DK, PK, CK) :
 
 def GUESSP(PM) : 
     # W.I.P. page 171
+    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR 
     pass
         
 def STARPU(P, U, MPA) : 
+    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR 
+
     dx = config.DATA["L"]/config.DATA["n_cell"]
     #Pold = GUESSP(PSTART)
     UDIFF = config.DATA["u_sup"] - config.DATA["u_inf"]
