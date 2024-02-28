@@ -6,7 +6,7 @@ from Core.Physics import *
 
 config = Config_Loader()
 
-def F12_Wendroff (U : np.array, dx, dt : float):
+def F12_Wendroff (U : np.array, dx, dt : float, signe : str="+"):
     
     n_cell = config.DATA["n_cell"]
     
@@ -24,7 +24,10 @@ def F12_Wendroff (U : np.array, dx, dt : float):
         else:    
             R1[i]=0.5*(U[i]+U[i+1]) - 0.5*(dt/dx)*(F_(U[i+1])-F_(U[i])) #R1[:,i]=U[:,i+1/2] at t'=t+1/2*dt
             R2[i]=0.5*(U[i]+U[i-1]) - 0.5*(dt/dx)*(F_(U[i])-F_(U[i-1])) #R2[:,i]=U[:,i-1/2] at t'=t+1/2*dt
-        R[i]=U[i]-(dt/dx)*(F_(R1[i]-F_(R2[i]))) #R[:,i]=U[:,i] at t'=t+dt
+        #R[i]=U[i]-(dt/dx)*(F_(R1[i])-F_(R2[i])) #R[:,i]=U[:,i] at t'=t+dt
         
-    return R
+    if signe=="+":
+        return R1
+    else:
+        return R2
         
