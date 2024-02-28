@@ -17,6 +17,6 @@ def U_next(U : np.array, dx, intercell : str = "LF") :
     if intercell == "LF" :
         return np.array(U + (dt/dx)*(F12_Friedrich(U,dx,dt,signe="-") - F12_Friedrich(U,dx,dt,signe="+")))
     if intercell == "LW" :
-        return np.array(U + (dt/dx)*(F12_Wendroff(U,dx,dt,signe="+") - F12_Wendroff(U,dx,dt,signe="-")))
+        return np.array(U - (dt/dx)*(F12_Wendroff(U,dx,dt,signe="+") - F12_Wendroff(U,dx,dt,signe="-")))
     if intercell == "Go" : 
         return "Not Yet Implemented"
