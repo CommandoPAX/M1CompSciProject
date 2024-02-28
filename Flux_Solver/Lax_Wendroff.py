@@ -6,15 +6,13 @@ from Core.Physics import *
 
 config = Config_Loader()
 
-def F12_Wendroff (U : np.array, X : np.array, dt : float):
+def F12_Wendroff (U : np.array, dx, dt : float):
     
     n_cell = config.DATA["n_cell"]
     
     R1=np.zeros((3,n_cell))
     R2=np.zeros((3,n_cell))
     R=np.zeros((3,n_cell))
-    
-    dx = X[1] - X[0]
     
     for i in range(n_cell-1):
         if i==0:
