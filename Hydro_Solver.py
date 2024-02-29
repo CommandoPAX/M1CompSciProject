@@ -53,14 +53,14 @@ if __name__ == "__main__" :
     dx = X[1]-X[0]
     U_test = U_next(U,dx,"LW")
 
-    """while 1 :
+    while 1 :
         Ttot += delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)
         #print(Ttot)
         U = U_next(U,dx,"LW")
-        if Ttot > 0.25 : break"""
+        if Ttot > 0.25 : break
         
     # TEST
 
-    Resultat = U_a_la_moins_un(U_test)
+    Resultat = U_a_la_moins_un(U)
   
     Create_Plots(X,Resultat)
