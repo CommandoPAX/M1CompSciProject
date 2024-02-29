@@ -10,7 +10,7 @@ n_cell = config.DATA["n_cell"]
 
 def F12_Friedrich (U : np.array, dx, dt : float, signe : str ="+"):
     
-    global n_cell
+    n_cell = len(U[:,0])
 
     R = np.zeros((n_cell,3))
 

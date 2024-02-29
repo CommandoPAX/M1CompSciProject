@@ -27,7 +27,9 @@ def U_(rho : np.array, u : np.array, P : np.array):
     Computes the array of conserved quantities as defined on page 1 of the subject
     """
     
-    global gamma, n_cell
+    global gamma
+    
+    n_cell = len(rho)
 
     Result = np.zeros((n_cell,3))
     Result[:, 0] = rho
@@ -43,7 +45,9 @@ def U_(rho : np.array, u : np.array, P : np.array):
 def U_a_la_moins_un (U):
     #### Inverse U_
 
-    global gamma,n_cell
+    global gamma
+
+    n_cell = len(U[:,0])
 
     Result = np.zeros((n_cell,3))
 
