@@ -70,7 +70,7 @@ class Application (Tk):
 
         self.n = 0
 
-        self.bouton = Button(self,text="Je suis un BOUTON",command=self.destroy)
+        self.bouton = Button(self,text="Je suis un BOUTON",command=self.Simulation)
         self.bouton.grid(row = 10, column =2)
 
         self.title("L'hydrodynamiquateur génial")
@@ -93,9 +93,13 @@ class Application (Tk):
 
     def plot(self):
 
+        self.U_int = 2*self.P/self.rho
+
         self.plot_rho.set_data(self.X,self.rho)
         self.plot_u.set_data(self.X,self.u)
         self.plot_P.set_data(self.X,self.P)
+        self.plot_U.set_data(self.X,self.U_int)
+
 
         if self.rho.any !=0 :
             dy = np.max(self.rho)-np.min(self.rho)
@@ -110,14 +114,40 @@ class Application (Tk):
 
         self.axes_P.set_ylim(np.min(self.P)-dy/10,np.max(self.P)+dy/10)
 
+        dy = np.max(self.U_int)- np.min(self.U_int)
+        self.axes_U.set_ylim(np.min(self.U_int)-dy/10,np.max(self.U_int)+dy/10)
+
         self.canvas.draw()
 
         #self.plot_U.set_data(X,self.U_int)
+
+    def Simulation(self):
+        flux =self.flux.get()
+        self.n +=1 
+        
+        self.U = U_(self.rho,self.u,self.P)
+        dx = self.X[1]-self.X[0]
+
+        self.T += delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
+        self.t.configure(text="t = "+str(self.T)+" s")
+        
+        self.U = U_next(self.U,dx,flux)
+
+        Res = U_a_la_moins_un(self.U)
+        self.rho = Res[:,0]
+        self.u = Res[:,1]
+        self.P = Res[:,2]
+
+        self.plot()
+        if self.T < 0.25 :self.after(1,self.Simulation)
+
 
     def ouvrir_conf (self, fichier = ""):
         if fichier == "" : fichier = askopenfilename (filetypes=[('Fichiers .json','.json'),('Tous les fichiers','.*')],initialdir="./Config")
         nom_fichier = fichier.split("/")
         nom_fichier = nom_fichier[len(nom_fichier)-1]
+        self.T = 0
+        self.t.configure(text="t = 0")
         self.nom_CI.configure(text=nom_fichier)
 
         self.config = Config_Loader(nom_fichier[:-5])
