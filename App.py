@@ -73,12 +73,12 @@ class Application (Tk):
         self.flux = StringVar()
         self.flux.set("LW")
 
-        self.Frame_flux = LabelFrame(self, text="Méthode de résolution")
-        self.Frame_flux.grid(row=1,column = 2)
+        self.Frame_flux = LabelFrame(self, text="Méthode de résolution",bg="white")
+        self.Frame_flux.grid(row=1,column = 2,padx= 20,pady =20)
 
-        Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux).grid(row = 1, column = 1)
-        Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux).grid(row = 2, column = 1)
-        Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux).grid(row = 3, column = 1)
+        Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux,bg="white").grid(row = 1, column = 1)
+        Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux,bg="white").grid(row = 2, column = 1)
+        Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux,bg="white").grid(row = 3, column = 1)
 
 
     def plot(self,event=None):
@@ -90,9 +90,6 @@ class Application (Tk):
 
 if __name__ == "__main__" :
     fen = Application()
-
-
-
 
     fen.mainloop()
     fen.quit()
