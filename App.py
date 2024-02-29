@@ -19,7 +19,6 @@ from Core.Conservative_State_Solver import*
 class Application (Tk):
     def __init__ (self):
         Tk.__init__(self)
-        self["bg"] = "white"
         
         self.fig = Figure(figsize=(5,5), dpi=100)
 
@@ -73,12 +72,12 @@ class Application (Tk):
         self.flux = StringVar()
         self.flux.set("LW")
 
-        self.Frame_flux = LabelFrame(self, text="Méthode de résolution",bg="white")
+        self.Frame_flux = LabelFrame(self, text="Méthode de résolution")
         self.Frame_flux.grid(row=1,column = 2,padx= 20,pady =20)
 
-        Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux,bg="white").grid(row = 1, column = 1)
-        Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux,bg="white").grid(row = 2, column = 1)
-        Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux,bg="white").grid(row = 3, column = 1)
+        Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux,relief="flat").grid(row = 1, column = 1)
+        Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux).grid(row = 2, column = 1)
+        Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux).grid(row = 3, column = 1)
 
 
     def plot(self,event=None):
