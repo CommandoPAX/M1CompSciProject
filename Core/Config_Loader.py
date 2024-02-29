@@ -6,8 +6,8 @@ class Config_Loader() :
     """ 
     Loads the config for a given problem to be used by other files
     """
-    def __init__(self) : 
-        self.Config_Name = "Sod_Problem"
+    def __init__(self,config_name="Sod_Problem") : 
+        self.Config_Name = config_name
         with open(f"./Config/{self.Config_Name}.json", "r", encoding="utf-8") as f :
             self.DATA = json.load(f)
             

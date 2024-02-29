@@ -1,4 +1,7 @@
 from tkinter import*
+from tkinter.messagebox import*
+from tkinter.filedialog import*
+
 import matplotlib
 import numpy as np
 
@@ -31,13 +34,14 @@ class Application (Tk):
         self.axes_rho = self.fig.add_subplot(221)
         self.axes_rho.set_xlabel("X [m]")
         self.axes_rho.set_ylabel("rho")
+        self.plot_rho, = self.axes_rho.plot(X,rho,label="density")
         self.axes_rho.legend()
 
         # Velocity
         axes = self.fig.add_subplot(222)
         axes.set_xlabel("X [m]")
         axes.set_ylabel("u [m/s]")
-        axes.plot(X, u, label="velocity")
+        self.plot_u, = axes.plot(X, u, label="velocity")
         axes.legend()
         
         # Pressure
@@ -70,22 +74,36 @@ class Application (Tk):
         self.title("L'hydrodynamiquateur génial")
 
         self.flux = StringVar()
-        self.flux.set("LW")
+        self.flux.set("LF")
 
         self.Frame_flux = LabelFrame(self, text="Méthode de résolution")
         self.Frame_flux.grid(row=1,column = 2,padx= 20,pady =20)
 
-        Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux,relief="flat").grid(row = 1, column = 1)
+        Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux).grid(row = 1, column = 1)
         Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux).grid(row = 2, column = 1)
         Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux).grid(row = 3, column = 1)
 
+        self.Frame_config = LabelFrame(self,text="Conditions initiales")
+        self.Frame_config.grid(column=2,row=2)
+        self.nom_CI = Label(self.Frame_config,text="sod.conf")
+        self.nom_CI.grid(row=1,padx=10,pady=10)
+        Button(self.Frame_config,text="Ouvrir",command=self.ouvrir_conf).grid(row=2)
 
     def plot(self,event=None):
         X = np.linspace(0,5)
-        #self.fig.clf()
-        self.axes_rho.plot(X,self.n*X)
+        self.plot_rho.set_ydata(X**self.n)
         self.canvas.draw()
+        self.canvas.flush_events()
         self.n+=1
+
+    def ouvrir_conf (self):
+        fichier = askopenfilename (filetypes=[('Fichiers .json','.json'),('Tous les fichiers','.*')],initialdir="./Config")
+        nom_fichier = fichier.split("/")
+        nom_fichier = nom_fichier[len(nom_fichier)-1]
+        self.nom_CI.configure(text=nom_fichier)
+
+        self.config = Config_Loader(nom_fichier[:-5])
+
 
 if __name__ == "__main__" :
     fen = Application()
