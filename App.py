@@ -151,7 +151,7 @@ class Application (Tk):
             self.t.configure(text="t = "+str(self.T)+" s")
             Res = Riemann(self.T)
         self.rho = Res[:,0]
-        self.u = abs(Res[:,1])
+        self.u = Res[:,1]
         self.P = Res[:,2]
 
         self.plot()
