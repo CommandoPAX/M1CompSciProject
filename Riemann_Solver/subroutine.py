@@ -42,8 +42,8 @@ def SAMPLE(PM, UM, S) :
                     # Sampled point is inside left fan
                     U_out = G5 * (CL + G7*config.DATA["u_inf"] + S)
                     C = G5*(CL + G7*(config.DATA["u_inf"] - S))
-                    D = config.DATA["rho_inf"]*(C/CL)**G4 
-                    P = config.DATA["P_inf"]*(C/CL)**G3 
+                    D_out = config.DATA["rho_inf"]*(C/CL)**G4 
+                    P_out = config.DATA["P_inf"]*(C/CL)**G3 
         else : 
             # Left shock
             PML = PM/config.DATA["P_inf"]
@@ -99,6 +99,7 @@ def SAMPLE(PM, UM, S) :
                     
     return D_out, U_out, P_out 
 
+
 def PREFUN(P, DK, PK, CK) : 
     global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR 
     
@@ -116,8 +117,8 @@ def PREFUN(P, DK, PK, CK) :
         FD = (1 - 0.5 * (P - PK)/(BK + P))*QRT 
     return F, FD, P, DK, PK, CK
 
-def GUESSP(PM) : 
-    # W.I.P. page 171
+
+def GUESSP() : 
     global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR 
     QUSER = 2.0
     
@@ -132,33 +133,32 @@ def GUESSP(PM) :
     
     if QMAX <= QUSER and PMIN <= PPV and PPV <= PMAX : 
         # Select PVRS Riemann solver 
-        
         PM = PPV 
-        return PM 
     
     else : 
         if PPV < PMIN : 
             # Select Two-Rarefaction Riemann solver 
-            
             PQ = (config.DATA["P_inf"]/config.DATA["P_sup"])**G1 
             UM = (PQ*config.DATA["u_inf"]/CL + config.DATA["u_sup"]/CR + G4 * (PQ - 1.0))/(PQ/CL + 1.0/CR)
             PTL = 1.0 + G7 * (config.DATA["u_inf"] - UM)/CL 
             PTR = 1.0 + G7 * (UM - config.DATA["u_sup"])/CR 
             PM = 0.5*(config.DATA["P_inf"]*PTL**G3 + config.DATA["P_sup"]*PTR**G3)
-            return PM 
+            
         else :  
             # Select Two-Shock Riemann solver with PVRS as estimate 
             GEL = np.sqrt((G5/config.DATA["rho_inf"])/(G6*config.DATA["P_inf"] + PPV))
             GER = np.sqrt((G5/config.DATA["rho_sup"])/(G6*config.DATA["P_sup"] + PPV))
             PM = (GEL*config.DATA["P_inf"] + GER*config.DATA["P_sup"] - (config.DATA["u_sup"] - config.DATA["u_inf"]) / (GEL+GER))
-            return PM
+    return PM 
         
-def STARPU() : 
+        
+def STARPU(P, U) : 
+    # Values returned are wrong, never U's value
     global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR 
     NRITER = 20 # Not really sure but it's my best guess
     TOLPRE = 1.0E-6
     
-    PSTART = GUESSP(P) # Not really what I'm supposed to pass as argument as the fortran code is unclear
+    PSTART = GUESSP()
     POLD = PSTART
     UDIFF = config.DATA["u_sup"] - config.DATA["u_inf"]
     DL = config.DATA["rho_inf"]
@@ -166,18 +166,18 @@ def STARPU() :
     DR = config.DATA["rho_sup"]
     PR = config.DATA["P_sup"]
     
-    result = []
-    
     for i in range(1, NRITER) : 
         FL, FLD, POLD, DL, PL, CL = PREFUN(POLD, DL, PL, CL)
         FR, FRD, POLD, DR, PR, CR = PREFUN(POLD, DR, PR, CR)
         P = POLD - (FL + FR + UDIFF)/(FLD + FRD)
+        print(POLD, (FL +FR + UDIFF), (FLD + FRD))
         CHANGE = 2.0 * abs((P-POLD)/(P+POLD))
         if CHANGE <= TOLPRE : 
             # Compute velocity in Star Region
             U = 0.5*(config.DATA["u_inf"] + config.DATA["u_sup"] + FR - FL)
-            return P, U
+            
         if P < 0.0 : 
             P = TOLPRE 
-            print("Divergence in Newton-Raphson iteration")
-    return P, U
+            POLD = P
+            
+    return P, U #Will only return a non-0 value for U if CHANGE <= TOLPRE was validated once, currently it does not

@@ -6,27 +6,12 @@ from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
-
-def NewConfig ():
-    Create_New_Config = input("Do you wish to create a new config file (y/n) ? ")
-    
-    if Create_New_Config == "y" or Create_New_Config == "Y" : #Currently doesn't work, didn't have time to finish before having to leave
-        _Gamma = float(input("Gamma ? "))
-        _L = float(input("L ? "))
-        _n_cell = int(input("n_cell ? "))
-        _C = float(input("C ? "))
-        _rho_inf = float(input("rho_inf ? "))
-        _rho_sup = float(input("rho_sup ? "))
-        _u_inf = float(input("u_inf ? "))
-        _u_sup = float(input("u_sup ? "))
-        _P_inf = float(input("P_inf ? "))
-        _P_sup = float(input("P_sup ? "))
-        config.generate_new_config(_Gamma, _L, _n_cell, _C, _rho_inf, _rho_sup, _u_inf, _u_sup, _P_inf, _P_sup, "New_Config")
+from Riemann_Solver.Riemann_Solver import Riemann_Solver
 
 
 if __name__ == "__main__" :
 
-    # We generate the space in which we'll work and we intialize all useful variables as 0 over this space
+    """# We generate the space in which we'll work and we intialize all useful variables as 0 over this space
     config = Config_Loader()
     n_cell = config.DATA["n_cell"]
 
@@ -62,4 +47,5 @@ if __name__ == "__main__" :
 
     Resultat = U_a_la_moins_un(U)
   
-    Create_Plots(X,Resultat)
+    Create_Plots(X,Resultat)"""
+    Riemann_Solver()
