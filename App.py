@@ -5,10 +5,13 @@ import numpy as np
 matplotlib.use('TkAgg')
 
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg,
-    NavigationToolbar2Tk
-)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+
+from Core.Physics import *
+from Core.Plot_Handler import *
+from Core.Config_Loader import Config_Loader
+from Flux_Solver.Lax_Friedrich import*
+from Core.Conservative_State_Solver import*
 
 #import matplotlib.pyplot as plt
 
@@ -23,6 +26,9 @@ class Application (Tk):
         X = np.linspace(0,5)
         rho = u = P = U_int = X
         
+        self.frame_graphes = Frame(self, borderwidth =2)
+        self.frame_graphes.grid(row = 1, column =1,rowspan=100)
+
         self.axes_rho = self.fig.add_subplot(221)
         self.axes_rho.set_xlabel("X [m]")
         self.axes_rho.set_ylabel("rho")
@@ -49,18 +55,31 @@ class Application (Tk):
         axes.plot(X,U_int, label="Internal energy")
         axes.legend()
 
-        self.canvas = FigureCanvasTkAgg(self.fig, self)
+        self.canvas = FigureCanvasTkAgg(self.fig, self.frame_graphes)
         self.canvas.draw()
-        self.canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
+        self.canvas.get_tk_widget().pack()
 
-        toolbar = NavigationToolbar2Tk(self.canvas, self)
+        toolbar = NavigationToolbar2Tk(self.canvas, self.frame_graphes)
         toolbar.update()
-        self.canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=True)
+        self.canvas._tkcanvas.pack()
 
         self.n = 0
 
         self.bouton = Button(self,text="Je suis un BOUTON",command=self.plot)
-        self.bouton.pack()
+        self.bouton.grid(row = 10, column =2)
+
+        self.title("L'hydrodynamiquateur génial")
+
+        self.flux = StringVar()
+        self.flux.set("LW")
+
+        self.Frame_flux = LabelFrame(self, text="Méthode de résolution")
+        self.Frame_flux.grid(row=1,column = 2)
+
+        Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux).grid(row = 1, column = 1)
+        Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux).grid(row = 2, column = 1)
+        Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux).grid(row = 3, column = 1)
+
 
     def plot(self,event=None):
         X = np.linspace(0,5)
@@ -71,6 +90,9 @@ class Application (Tk):
 
 if __name__ == "__main__" :
     fen = Application()
-    fen.bind("<Return>",fen.plot)
+
+
+
+
     fen.mainloop()
     fen.quit()
