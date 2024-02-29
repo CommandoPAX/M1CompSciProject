@@ -27,8 +27,11 @@ class Application (Tk):
 
         X = np.linspace(0,5)
         rho = u = P = U_int = X
-        
-        self.frame_graphes = Frame(self, borderwidth =2)
+
+        self.t = Label(self,text="t = 0",font="Arial 20",pady = 10)
+        self.t.grid(row=0,column=1)
+
+        self.frame_graphes = Frame(self, borderwidth =2,padx = 10, pady = 10)
         self.frame_graphes.grid(row = 1, column =1,rowspan=100)
 
         self.axes_rho = self.fig.add_subplot(221)
@@ -96,8 +99,8 @@ class Application (Tk):
         self.canvas.flush_events()
         self.n+=1
 
-    def ouvrir_conf (self):
-        fichier = askopenfilename (filetypes=[('Fichiers .json','.json'),('Tous les fichiers','.*')],initialdir="./Config")
+    def ouvrir_conf (self, fichier = ""):
+        if fichier == "" : fichier = askopenfilename (filetypes=[('Fichiers .json','.json'),('Tous les fichiers','.*')],initialdir="./Config")
         nom_fichier = fichier.split("/")
         nom_fichier = nom_fichier[len(nom_fichier)-1]
         self.nom_CI.configure(text=nom_fichier)
@@ -107,6 +110,7 @@ class Application (Tk):
 
 if __name__ == "__main__" :
     fen = Application()
+    fen.ouvrir_conf("./Config/Sod_Problem.json")
 
     fen.mainloop()
     fen.quit()
