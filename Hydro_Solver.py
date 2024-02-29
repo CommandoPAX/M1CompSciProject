@@ -11,13 +11,13 @@ from Riemann_Solver.Riemann_Solver import Riemann_Solver
 
 if __name__ == "__main__" :
 
-    """# We generate the space in which we'll work and we intialize all useful variables as 0 over this space
+    # We generate the space in which we'll work and we intialize all useful variables as 0 over this space
     config = Config_Loader()
     n_cell = config.DATA["n_cell"]
 
     X = np.linspace(0,1,num=n_cell)
     
-    rho = np.zeros(n_cell)
+    """rho = np.zeros(n_cell)
     u = np.zeros(n_cell)
     P = np.zeros(n_cell)
 
@@ -45,7 +45,8 @@ if __name__ == "__main__" :
         
     # TEST
 
-    Resultat = U_a_la_moins_un(U)
-  
-    Create_Plots(X,Resultat)"""
-    Riemann_Solver()
+    Resultat = U_a_la_moins_un(U)"""
+    
+    Resultat = Riemann_Solver()
+    Create_Plots(X,Resultat)
+    
