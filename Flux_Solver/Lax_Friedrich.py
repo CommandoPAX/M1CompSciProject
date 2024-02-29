@@ -13,8 +13,6 @@ def F12_Friedrich (U : np.array, dx, dt : float, signe : str ="+"):
     global n_cell
 
     R = np.zeros((n_cell,3))
-    dx
-
 
     if signe == "+":
         for i in range(n_cell):

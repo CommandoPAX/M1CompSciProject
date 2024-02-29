@@ -51,15 +51,16 @@ if __name__ == "__main__" :
 
     U = U_(rho,u,P)
     dx = X[1]-X[0]
-    #plt.plot(X,U_next(U,dx,"LW")[:,1])
-    while 1 :
+    U_test = U_next(U,dx,"LW")
+
+    """while 1 :
         Ttot += delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)
         #print(Ttot)
-        U = U_next(U,dx,"LF")
-        if Ttot > 0.25 : break
+        U = U_next(U,dx,"LW")
+        if Ttot > 0.25 : break"""
         
     # TEST
 
-    Resultat = U_a_la_moins_un(U)
+    Resultat = U_a_la_moins_un(U_test)
   
     Create_Plots(X,Resultat)
