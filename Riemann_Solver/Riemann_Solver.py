@@ -4,7 +4,7 @@ from Core.Config_Loader import Config_Loader
 from Riemann_Solver.subroutine import *
 import numpy as np
     
-def Riemann_Solver(t) : 
+def Riemann(t) : 
     
     config = Config_Loader()
 

@@ -13,6 +13,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from Core.Physics import *
 from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
+from Riemann_Solver import Riemann_Solver
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
 
@@ -130,9 +131,11 @@ class Application (Tk):
         self.T += delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
         self.t.configure(text="t = "+str(self.T)+" s")
         
-        self.U = U_next(self.U,dx,flux)
-
-        Res = U_a_la_moins_un(self.U)
+        if flux != "Riemann" :
+            self.U = U_next(self.U,dx,flux)
+            Res = U_a_la_moins_un(self.U)
+        else :
+            Res = Riemann_Solver(self.T)
         self.rho = Res[:,0]
         self.u = Res[:,1]
         self.P = Res[:,2]
