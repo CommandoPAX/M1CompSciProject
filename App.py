@@ -13,7 +13,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from Core.Physics import *
 from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
-from Riemann_Solver import Riemann_Solver
+from Riemann_Solver.Riemann_Solver import*
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
 
@@ -116,7 +116,10 @@ class Application (Tk):
         self.axes_P.set_ylim(np.min(self.P)-dy/10,np.max(self.P)+dy/10)
 
         dy = np.max(self.U_int)- np.min(self.U_int)
-        self.axes_U.set_ylim(np.min(self.U_int)-dy/10,np.max(self.U_int)+dy/10)
+        try :
+            self.axes_U.set_ylim(np.min(self.U_int)-dy/10,np.max(self.U_int)+dy/10)
+        except :
+            pass
 
         self.canvas.draw()
 
@@ -127,15 +130,16 @@ class Application (Tk):
         self.n +=1 
         
         dx = self.X[1]-self.X[0]
-
-        self.T += delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
-        self.t.configure(text="t = "+str(self.T)+" s")
         
         if flux != "Riemann" :
+            self.T += delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
+            self.t.configure(text="t = "+str(self.T)+" s")
             self.U = U_next(self.U,dx,flux)
             Res = U_a_la_moins_un(self.U)
         else :
-            Res = Riemann_Solver(self.T)
+            self.T += 0.001
+            self.t.configure(text="t = "+str(self.T)+" s")
+            Res = Riemann(self.T)
         self.rho = Res[:,0]
         self.u = Res[:,1]
         self.P = Res[:,2]

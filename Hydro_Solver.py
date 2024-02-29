@@ -6,7 +6,7 @@ from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
-from Riemann_Solver.Riemann_Solver import Riemann_Solver
+from Riemann_Solver.Riemann_Solver import Riemann
 
 
 if __name__ == "__main__" :
@@ -47,6 +47,6 @@ if __name__ == "__main__" :
 
     Resultat = U_a_la_moins_un(U)"""
     
-    Resultat = Riemann(0.25)
+    Resultat = Riemann(0.001)
     Create_Plots(X,Resultat)
     
