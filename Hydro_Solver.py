@@ -51,7 +51,6 @@ if __name__ == "__main__" :
 
     U = U_(rho,u,P)
     dx = X[1]-X[0]
-    U_test = U_next(U,dx,"LW")
 
     while 1 :
         Ttot += delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)
