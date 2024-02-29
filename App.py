@@ -71,8 +71,14 @@ class Application (Tk):
 
         self.n = 0
 
-        self.bouton = Button(self,text="Je suis un BOUTON",command=self.Simulation)
+        self.bouton = Button(self,text="Lancer la simulation",command=self.lancer)
         self.bouton.grid(row = 10, column =2)
+
+        self.bouton = Button(self,text="Stop",command=self.Stop)
+        self.bouton.grid(row = 11, column =2)
+
+        self.bouton = Button(self,text="T = 0",command=self.T0)
+        self.bouton.grid(row = 12, column =2)
 
         self.title("L'hydrodynamiquateur génial")
 
@@ -125,6 +131,10 @@ class Application (Tk):
 
         #self.plot_U.set_data(X,self.U_int)
 
+    def lancer(self):
+        self.stop = False
+        self.Simulation()
+
     def Simulation(self):
         flux =self.flux.get()
         self.n +=1 
@@ -141,22 +151,27 @@ class Application (Tk):
             self.t.configure(text="t = "+str(self.T)+" s")
             Res = Riemann(self.T)
         self.rho = Res[:,0]
-        self.u = Res[:,1]
+        self.u = abs(Res[:,1])
         self.P = Res[:,2]
 
         self.plot()
-        if self.T < 0.25 :self.after(1,self.Simulation)
+        if self.T < 0.25 and not self.stop :self.after(1,self.Simulation)
 
+    def Stop(self):
+        self.stop = True
+
+    def T0(self):
+        self.ouvrir_conf(self.nom_fichier)
 
     def ouvrir_conf (self, fichier = ""):
         if fichier == "" : fichier = askopenfilename (filetypes=[('Fichiers .json','.json'),('Tous les fichiers','.*')],initialdir="./Config")
         nom_fichier = fichier.split("/")
-        nom_fichier = nom_fichier[len(nom_fichier)-1]
+        self.nom_fichier = nom_fichier[len(nom_fichier)-1]
         self.T = 0
         self.t.configure(text="t = 0")
-        self.nom_CI.configure(text=nom_fichier)
+        self.nom_CI.configure(text=self.nom_fichier)
 
-        self.config = Config_Loader(nom_fichier[:-5])
+        self.config = Config_Loader(self.nom_fichier[:-5])
 
         self.n_cell = self.config.DATA["n_cell"]
 
