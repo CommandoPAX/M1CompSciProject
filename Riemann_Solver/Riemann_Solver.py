@@ -4,7 +4,7 @@ from Core.Config_Loader import Config_Loader
 from Riemann_Solver.subroutine import *
 import numpy as np
     
-def Riemann_Solver() : 
+def Riemann_Solver(t) : 
     
     config = Config_Loader()
 
@@ -18,7 +18,7 @@ def Riemann_Solver() :
 
     # We test for the intial pressure conditions 
 
-    TIMEOUT = 500 #seconds (maybe)
+    TIMEOUT = t #seconds (maybe)
     DIAPH = 0.5 #Discontinuity position, considered at 0.5*L, unsure if this value is correct
     
     U = np.zeros((config.DATA["n_cell"],3))

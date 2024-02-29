@@ -47,6 +47,6 @@ if __name__ == "__main__" :
 
     Resultat = U_a_la_moins_un(U)"""
     
-    Resultat = Riemann_Solver()
+    Resultat = Riemann_Solver(t)
     Create_Plots(X,Resultat)
     

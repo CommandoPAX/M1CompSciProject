@@ -125,7 +125,6 @@ class Application (Tk):
         flux =self.flux.get()
         self.n +=1 
         
-        self.U = U_(self.rho,self.u,self.P)
         dx = self.X[1]-self.X[0]
 
         self.T += delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
@@ -154,8 +153,6 @@ class Application (Tk):
 
         self.n_cell = self.config.DATA["n_cell"]
 
-        self.X = np.linspace(0,1,num=self.n_cell)
-
         self.rho = np.zeros(self.n_cell)
         self.u = np.zeros(self.n_cell)
         self.P = np.zeros(self.n_cell)
@@ -166,7 +163,12 @@ class Application (Tk):
             
         self.rho[self.n_cell//2:] = self.config.DATA["rho_sup"]
         self.u[self.n_cell//2:] = self.config.DATA["u_sup"]
-        self.P[self.n_cell//2:] = self.config.DATA["P_sup"]        
+        self.P[self.n_cell//2:] = self.config.DATA["P_sup"]    
+
+        self.n = 0    
+
+        self.X = np.linspace(0,1,num=self.n_cell)
+        self.U = U_(self.rho,self.u,self.P)
 
         self.plot()
 
