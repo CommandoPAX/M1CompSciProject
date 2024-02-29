@@ -25,8 +25,7 @@ class Application (Tk):
         
         self.fig = Figure(figsize=(5,5), dpi=100)
 
-        X = np.linspace(0,5)
-        rho = u = P = U_int = X
+        X = np.linspace(0,1)
 
         self.t = Label(self,text="t = 0",font="Arial 20",pady = 10)
         self.t.grid(row=0,column=1)
@@ -37,29 +36,29 @@ class Application (Tk):
         self.axes_rho = self.fig.add_subplot(221)
         self.axes_rho.set_xlabel("X [m]")
         self.axes_rho.set_ylabel("rho")
-        self.plot_rho, = self.axes_rho.plot(X,rho,label="density")
+        self.plot_rho, = self.axes_rho.plot([0,0],label="density")
         self.axes_rho.legend()
 
         # Velocity
-        axes = self.fig.add_subplot(222)
-        axes.set_xlabel("X [m]")
-        axes.set_ylabel("u [m/s]")
-        self.plot_u, = axes.plot(X, u, label="velocity")
-        axes.legend()
+        self.axes_u = self.fig.add_subplot(222)
+        self.axes_u.set_xlabel("X [m]")
+        self.axes_u.set_ylabel("u [m/s]")
+        self.plot_u, = self.axes_u.plot([0,0],label="velocity")
+        self.axes_u.legend()
         
         # Pressure
-        axes = self.fig.add_subplot(223)
-        axes.set_xlabel("X [m]")
-        axes.set_ylabel("P")
-        axes.plot(X, P, label="Pressure")
-        axes.legend()
+        self.axes_P = self.fig.add_subplot(223)
+        self.axes_P.set_xlabel("X [m]")
+        self.axes_P.set_ylabel("P")
+        self.plot_P, = self.axes_P.plot([0,0],label="Pression")
+        self.axes_P.legend()
         
         # Internal Energy
-        axes = self.fig.add_subplot(224)
-        axes.set_xlabel("X [m]")
-        axes.set_ylabel("U_int")
-        axes.plot(X,U_int, label="Internal energy")
-        axes.legend()
+        self.axes_U = self.fig.add_subplot(224)
+        self.axes_U.set_xlabel("X [m]")
+        self.axes_U.set_ylabel("U_int")
+        self.plot_U, = self.axes_U.plot([0,0],label="Energie interne")
+        self.axes_U.legend()
 
         self.canvas = FigureCanvasTkAgg(self.fig, self.frame_graphes)
         self.canvas.draw()
@@ -71,7 +70,7 @@ class Application (Tk):
 
         self.n = 0
 
-        self.bouton = Button(self,text="Je suis un BOUTON",command=self.plot)
+        self.bouton = Button(self,text="Je suis un BOUTON",command=self.destroy)
         self.bouton.grid(row = 10, column =2)
 
         self.title("L'hydrodynamiquateur génial")
@@ -92,12 +91,28 @@ class Application (Tk):
         self.nom_CI.grid(row=1,padx=10,pady=10)
         Button(self.Frame_config,text="Ouvrir",command=self.ouvrir_conf).grid(row=2)
 
-    def plot(self,event=None):
-        X = np.linspace(0,5)
-        self.plot_rho.set_ydata(X**self.n)
+    def plot(self):
+
+        self.plot_rho.set_data(self.X,self.rho)
+        self.plot_u.set_data(self.X,self.u)
+        self.plot_P.set_data(self.X,self.P)
+
+        if self.rho.any !=0 :
+            dy = np.max(self.rho)-np.min(self.rho)
+            self.axes_rho.set_ylim(np.min(self.rho)-dy/10,np.max(self.rho)+dy/10)
+
+
+        if self.u.any() != 0 :
+            dy = np.max(self.u)-np.min(self.u)
+            self.axes_u.set_ylim(np.min(self.u)-dy/10,np.max(self.u)+dy/10)
+
+        dy = np.max(self.P)-np.min(self.P)
+
+        self.axes_P.set_ylim(np.min(self.P)-dy/10,np.max(self.P)+dy/10)
+
         self.canvas.draw()
-        self.canvas.flush_events()
-        self.n+=1
+
+        #self.plot_U.set_data(X,self.U_int)
 
     def ouvrir_conf (self, fichier = ""):
         if fichier == "" : fichier = askopenfilename (filetypes=[('Fichiers .json','.json'),('Tous les fichiers','.*')],initialdir="./Config")
@@ -106,6 +121,24 @@ class Application (Tk):
         self.nom_CI.configure(text=nom_fichier)
 
         self.config = Config_Loader(nom_fichier[:-5])
+
+        self.n_cell = self.config.DATA["n_cell"]
+
+        self.X = np.linspace(0,1,num=self.n_cell)
+
+        self.rho = np.zeros(self.n_cell)
+        self.u = np.zeros(self.n_cell)
+        self.P = np.zeros(self.n_cell)
+
+        self.rho[:self.n_cell//2] = self.config.DATA["rho_inf"]
+        self.u[:self.n_cell//2] = self.config.DATA["u_inf"]
+        self.P[:self.n_cell//2] = self.config.DATA["P_inf"]
+            
+        self.rho[self.n_cell//2:] = self.config.DATA["rho_sup"]
+        self.u[self.n_cell//2:] = self.config.DATA["u_sup"]
+        self.P[self.n_cell//2:] = self.config.DATA["P_sup"]        
+
+        self.plot()
 
 
 if __name__ == "__main__" :
