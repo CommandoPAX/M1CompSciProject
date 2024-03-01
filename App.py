@@ -150,12 +150,14 @@ class Application (Tk):
             self.T += 0.001
             self.t.configure(text="t = "+str(self.T)+" s")
             Res = Riemann(self.T)
+            
         self.rho = Res[:,0]
         self.u = Res[:,1]
         self.P = Res[:,2]
 
         self.plot()
-        if self.T < 0.25 and not self.stop :self.after(1,self.Simulation)
+        if self.T < 0.25 and not self.stop :
+            self.after(1,self.Simulation)
 
     def Stop(self):
         self.stop = True
