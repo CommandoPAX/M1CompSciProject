@@ -71,14 +71,9 @@ class Application (Tk):
 
         self.n = 0
 
-        self.bouton = Button(self,text="Lancer la simulation",command=self.lancer)
-        self.bouton.grid(row = 10, column =2)
-
-        self.bouton = Button(self,text="Stop",command=self.Stop)
-        self.bouton.grid(row = 11, column =2)
-
-        self.bouton = Button(self,text="T = 0",command=self.T0)
-        self.bouton.grid(row = 12, column =2)
+        Button(self,text="Lancer la simulation",command=self.lancer).grid(row = 10, column =2)
+        Button(self,text="Stop",command=self.Stop).grid(row = 11, column =2)
+        Button(self,text="T = 0",command=self.T0).grid(row = 12, column =2)
 
         self.title("L'hydrodynamiquateur génial")
 
@@ -97,6 +92,20 @@ class Application (Tk):
         self.nom_CI = Label(self.Frame_config,text="sod.conf")
         self.nom_CI.grid(row=1,padx=10,pady=10)
         Button(self.Frame_config,text="Ouvrir",command=self.ouvrir_conf).grid(row=2)
+
+        self.Frame_animation = LabelFrame(self,text="Animation")
+        self.Frame_animation.grid(row =3,column=2,pady=20,padx=10)
+
+        self.graphes = BooleanVar() # Ne fonctionne pas pour l'instant
+
+        Checkbutton(self.Frame_animation, text="Afficher les graphiques",onvalue=True,offvalue=False,variable=self.graphes,command=self.Afficher_graphes).grid(row=1,column=0,pady=5,padx=5,columnspan=2)
+        self.graphes.set(True)
+
+        Label(self.Frame_animation,text = "Plot toutes les ").grid(row=2,column = 0,padx =0 )
+        self.step = Spinbox(self.Frame_animation,from_=1,to=1e10,width=6)
+        self.step.grid(row=2,column=1)
+        Label(self.Frame_animation,text = "itérations").grid(row=2,column = 2,padx =0,pady=10 )
+
 
     def plot(self):
 
@@ -127,8 +136,6 @@ class Application (Tk):
         except :
             pass
 
-        self.canvas.draw()
-
         #self.plot_U.set_data(X,self.U_int)
 
     def lancer(self):
@@ -143,21 +150,52 @@ class Application (Tk):
         
         if flux != "Riemann" :
             self.T += delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
-            self.t.configure(text="t = "+str(self.T)+" s")
             self.U = U_next(self.U,dx,flux)
             Res = U_a_la_moins_un(self.U)
         else :
             self.T += 0.001
-            self.t.configure(text="t = "+str(self.T)+" s")
             Res = Riemann(self.T)
-            
-        self.rho = Res[:,0]
-        self.u = Res[:,1]
-        self.P = Res[:,2]
 
-        self.plot()
-        if self.T < 0.25 and not self.stop :
-            self.after(1,self.Simulation)
+        if self.graphes.get() :
+            if self.n % int(self.step.get()) == 0 :  # Ne plot pas à chaque étape pour accélérer les calculs
+
+                self.rho = Res[:,0]
+                self.u = Res[:,1]
+                self.P = Res[:,2]
+
+                self.plot()
+                self.canvas.draw()
+                self.t.configure(text="t = "+str(self.T)+" s")
+
+
+            if self.T < 0.25 and not self.stop :
+                self.after(1,self.Simulation)
+            else :
+                self.canvas.draw()
+                self.t.configure(text="t = "+str(self.T)+" s")  
+        else :     
+            if self.T < 0.25 and not self.stop :
+                self.Simulation()
+            else :
+                showinfo("Fin","Fin")
+                
+                self.rho = Res[:,0]
+                self.u = Res[:,1]
+                self.P = Res[:,2]
+
+                self.plot()
+                self.canvas.draw()
+                self.t.configure(text="t = "+str(self.T)+" s")
+
+     
+
+    def Afficher_graphes(self):
+        self.axes_rho.set_visible(self.graphes.get())
+        self.axes_u.set_visible(self.graphes.get())
+        self.axes_P.set_visible(self.graphes.get())
+        self.axes_U.set_visible(self.graphes.get())
+
+        self.canvas.draw()
 
     def Stop(self):
         self.stop = True
@@ -195,7 +233,7 @@ class Application (Tk):
         self.U = U_(self.rho,self.u,self.P)
 
         self.plot()
-
+        self.canvas.draw()
 
 if __name__ == "__main__" :
     fen = Application()
