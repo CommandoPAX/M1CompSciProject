@@ -13,7 +13,13 @@ def U_next(U : np.array, dx, intercell : str = "LF") :
     U = array([rho_i, u_i, P_i]) where i is the cell index
     With this convention, U[:, 0] is every density, U[:, 1] every speed, U[:, 2] every pressure
     """
-    dt = delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)
+
+    Um = U_a_la_moins_un(U)
+    rho = Um[:,0]
+    u = Um[:,1]
+    P = Um[:,2]
+
+    dt = delta_t(u, a_(P, rho),dx)
     if intercell == "LF" :
         return np.array(U + (dt/dx)*(F12_Friedrich(U,dx,dt,signe="-") - F12_Friedrich(U,dx,dt,signe="+")))
     if intercell == "LW" :
