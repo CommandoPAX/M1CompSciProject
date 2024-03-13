@@ -22,7 +22,4 @@ def F12_Wendroff (U : np.array, dx, dt : float, signe : str="+"):
             if i!=0 : R[i] = F_(0.5*(U[i-1]+U[i])-0.5*dt/dx*(F_(U[i])-F_(U[i-1])))
             if i==0 : R[i] = F_(0.5*(U[i]+U[i])-0.5*dt/dx*(F_(U[i])-F_(U[i])))
 
-    else :
-        raise ZeroDivisionError("tout est faux aaaaaaaaaaaaaah")
-
     return R
