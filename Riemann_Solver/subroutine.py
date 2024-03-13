@@ -170,7 +170,7 @@ def STARPU(P, U) :
         FL, FLD, POLD, DL, PL, CL = PREFUN(POLD, DL, PL, CL)
         FR, FRD, POLD, DR, PR, CR = PREFUN(POLD, DR, PR, CR)
         P = POLD - ((FL + FR + UDIFF)/(FLD + FRD))
-        print(POLD, (FL +FR + UDIFF)/(FLD + FRD))
+
         CHANGE = 2.0 * abs((P-POLD)/(P+POLD))
         if CHANGE <= TOLPRE : 
             # Compute velocity in Star Region

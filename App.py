@@ -17,8 +17,6 @@ from Riemann_Solver.Riemann_Solver import*
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
 
-#import matplotlib.pyplot as plt
-
 
 class Application (Tk):
     def __init__ (self):
@@ -107,30 +105,33 @@ class Application (Tk):
         Label(self.Frame_animation,text = "itérations").grid(row=2,column = 2,padx =0,pady=10 )
 
 
-    def plot(self):
-
-        self.U_int = 2*self.P/self.rho
+    def Conditions_bord (self):
 
         self.U_int[0]=self.U_int[1]
         self.P[0]=self.P[1]
         self.rho[0]=self.rho[1]
         self.u[0]=self.u[1]
 
+        self.U_int[self.n_cell-1]=self.U_int[self.n_cell-2]
+        self.P[self.n_cell-1]=self.P[self.n_cell-2]
+        self.rho[self.n_cell-1]=self.rho[self.n_cell-2]
+        self.u[self.n_cell-1]=self.u[self.n_cell-2]
+
+    def plot(self):
+
+        self.U_int = 2*self.P/self.rho
+
+        self.Conditions_bord()
+
         self.plot_rho.set_data(self.X,self.rho)
         self.plot_u.set_data(self.X,self.u)
         self.plot_P.set_data(self.X,self.P)
         self.plot_U.set_data(self.X,self.U_int)
 
-
         self.maj_echelle(self.axes_u, self.u)
         self.maj_echelle(self.axes_P, self.P)
         self.maj_echelle(self.axes_rho, self.rho)
-        
-        try:
-            self.maj_echelle(self.axes_U, self.U_int)
-        except:
-            pass
-        #self.plot_U.set_data(X,self.U_int)
+        self.maj_echelle(self.axes_U, self.U_int)
 
     def maj_echelle (self, axes, var) :
         if var.any() !=0 :
@@ -155,6 +156,8 @@ class Application (Tk):
             self.T += 0.001
             Res = Riemann(self.T)
 
+        self.Conditions_bord()
+
         if self.graphes.get() :
             if self.n % int(self.step.get()) == 0 :  # Ne plot pas à chaque étape pour accélérer les calculs
 
@@ -164,14 +167,14 @@ class Application (Tk):
 
                 self.plot()
                 self.canvas.draw()
-                self.t.configure(text="t = "+str(self.T)+" s")
+                self.t.configure(text="t = "+str(round(self.T,5))+" s")
 
 
             if self.T < 0.25 and not self.stop :
                 self.after(1,self.Simulation)
             else :
                 self.canvas.draw()
-                self.t.configure(text="t = "+str(self.T)+" s")  
+                self.t.configure(text="t = "+str(round(self.T,5))+" s")  
         else :     
             if self.T < 0.25 and not self.stop :
                 self.Simulation()
@@ -184,7 +187,7 @@ class Application (Tk):
 
                 self.plot()
                 self.canvas.draw()
-                self.t.configure(text="t = "+str(self.T)+" s")
+                self.t.configure(text="t = "+str(round(self.T,5))+" s")
 
      
 
