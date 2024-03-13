@@ -115,3 +115,7 @@ def derivee (f, x : np.array):
             yp[i] = (y[i-1]+y[i])/(2*dx)
 
         return yp
+
+def Err_(U1 : np.array, U2 : np.array):
+    err=np.abs(U1-U2)
+    return err
