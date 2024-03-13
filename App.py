@@ -111,32 +111,31 @@ class Application (Tk):
 
         self.U_int = 2*self.P/self.rho
 
+        self.U_int[0]=self.U_int[1]
+        self.P[0]=self.P[1]
+        self.rho[0]=self.rho[1]
+        self.u[0]=self.u[1]
+
         self.plot_rho.set_data(self.X,self.rho)
         self.plot_u.set_data(self.X,self.u)
         self.plot_P.set_data(self.X,self.P)
         self.plot_U.set_data(self.X,self.U_int)
 
 
-        if self.rho.any !=0 :
-            dy = np.max(self.rho)-np.min(self.rho)
-            self.axes_rho.set_ylim(np.min(self.rho)-dy/10,np.max(self.rho)+dy/10)
-
-
-        if self.u.any() != 0 :
-            dy = np.max(self.u)-np.min(self.u)
-            self.axes_u.set_ylim(np.min(self.u)-dy/10,np.max(self.u)+dy/10)
-
-        dy = np.max(self.P)-np.min(self.P)
-
-        self.axes_P.set_ylim(np.min(self.P)-dy/10,np.max(self.P)+dy/10)
-
-        dy = np.max(self.U_int)- np.min(self.U_int)
-        try :
-            self.axes_U.set_ylim(np.min(self.U_int)-dy/10,np.max(self.U_int)+dy/10)
-        except :
+        self.maj_echelle(self.axes_u, self.u)
+        self.maj_echelle(self.axes_P, self.P)
+        self.maj_echelle(self.axes_rho, self.rho)
+        
+        try:
+            self.maj_echelle(self.axes_U, self.U_int)
+        except:
             pass
-
         #self.plot_U.set_data(X,self.U_int)
+
+    def maj_echelle (self, axes, var) :
+        if var.any() !=0 :
+            dy = np.max(var) - np.min(var)
+            axes.set_ylim(np.min(var) - dy/10, np.max(var)+dy/10)
 
     def lancer(self):
         self.stop = False
