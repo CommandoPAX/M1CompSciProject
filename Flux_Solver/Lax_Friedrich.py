@@ -23,7 +23,5 @@ def F12_Friedrich (U : np.array, dx, dt : float, signe : str ="+"):
             if i != 0 : R[i] = 0.5*(F_(U[i-1])+F_(U[i]))+0.5*dx/dt*(U[i-1]-U[i])
             if i== 0 : R[i] = 0.5*(F_(U[i])+F_(U[i]))+0.5*dx/dt*(U[i]-U[i])
 
-    else :
-        raise ZeroDivisionError("tout est faux aaaaaaaaaaaaaah")
 
     return R

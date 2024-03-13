@@ -41,6 +41,8 @@ if __name__ == "__main__" :
         Ttot += delta_t(U[:, 1], a_(U[:, 2], U[:, 0]),dx)
         #print(Ttot)
         U = U_next(U,dx,"LW")
+        U_exact = Riemann(Ttot)
+        Err_U = Err_(U,U_exact)
         if Ttot > 0.25 : break
         
     # TEST
