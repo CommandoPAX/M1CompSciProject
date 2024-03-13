@@ -174,10 +174,11 @@ def STARPU(P, U) :
         CHANGE = 2.0 * abs((P-POLD)/(P+POLD))
         if CHANGE <= TOLPRE : 
             # Compute velocity in Star Region
-            U = 0.5*(config.DATA["u_inf"] + config.DATA["u_sup"] + FR - FL)
-            
+            break
         if P < 0.0 : 
             P = TOLPRE 
-            POLD = P
-            
+        POLD = P
+    
+    U = 0.5*(config.DATA["u_inf"] + config.DATA["u_sup"] + FR - FL)
+
     return P, U #Will only return a non-0 value for U if CHANGE <= TOLPRE was validated once, currently it does not
