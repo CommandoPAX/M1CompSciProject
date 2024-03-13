@@ -58,8 +58,75 @@ class Riemann ():
 
         return self.PM
 
+    def Prefun (self, F, FD, P, DK, PK, CK) :
+        if P <= PK :
+            self.PRAT = P/PK
+            self.F = self.G4 * CK *(self.PRAT**self.G1 -1)
+            self.FD = (1./(DK*CK))*self.PRAT**(-1 * self.G2)
+        else :
+            self.AK = self.G5/DK
+            self.BK = self.G6*PK
+            self.QRT = sqrt(self.AK/(self.BK+P))
+            self.F = (P - PK)*self.QRT
+            self.FD = (1 - 0.5*(P-PK)/(self.BK+P))*QRT
+
+        return self.FD
+
+    def Sample (self, PM, UM, S, D , U, P):
+        if S <= UM :
+
+            if self.PM <= self.P_inf :
+
+                self.SHL = self.u_inf - self.CL     
 
 
+                if S <= self.SHL :
+                    D = self.rho_inf  
+                    U = self.u_inf
+                    P = self.P_inf
+                else :
+                    self.CML = self.CL *(self.P_sup/self.P_inf)**self.G1
+                    self.STL = self.UM -self.CML
+
+                    if S >= self.STL :
+                        D = self.rho_inf *(self.PM/self.PL)**(1/self.gamma)
+                        U = self.UM
+                        P = self.PM
+                    
+                    else :
+                        U = self.G5 *(self.CL +self.G7*self.u_inf + S)
+                        C = self.G5*(self.CL +self.G7*(self.u_inf -S ))
+                        D = self.rho_inf * (C/self.CL)**self.G4
+                        P = self.P_inf*(C/self.CL)**self.G3
+            else :
+                self.PML = self.PM / self.P_inf
+                self.SL = self.u_inf - self.CL * sqrt(self.G2 *self.PML + self.G1)
+
+                if S <= self.SL :
+                    D = self.rho_inf
+                    U = self.u_inf
+                    P = self.P_inf
+
+                else : 
+                    D = self.rho_inf*(self.PML + self.G6)/(self.PML*self.G6 + 1)
+                    U = self.UM
+                    P = self.PM
+        else :
+            if self.PM > self.P_sup :
+                self.PMR = self.PM/self.P_sup
+                self.SR = self.u_sup + self.CR *sqrt(self.G2*self.PMR+self.G1)
+
+                if S >= self.SR :
+                    D = self.rho_sup
+                    U = self.u_sup
+                    P = self.P_sup
+                else :
+                    D = self.rho_sup*(self.PMR+self.G6)/(self.PMR*self.G6+1)
+                    U = self.UM
+                    P = self.PM
+            else :
+                
+                
 
 
 
