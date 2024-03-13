@@ -19,7 +19,7 @@ CL = np.sqrt(config.DATA["gamma"]*config.DATA["P_inf"]/config.DATA["rho_inf"])
 CR = np.sqrt(config.DATA["gamma"]*config.DATA["P_sup"]/config.DATA["rho_sup"])
 
 def SAMPLE(PM, UM, S) : 
-    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR
+    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR, config
     
     if S <= UM :
         # Sampling point lies to the left of the contact discontinuity
@@ -119,7 +119,7 @@ def PREFUN(P, DK, PK, CK) :
 
 
 def GUESSP() : 
-    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR 
+    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR , config
     QUSER = 2.0
     
     #Compute guess pressure from PVRS Riemann solver
@@ -154,7 +154,7 @@ def GUESSP() :
         
 def STARPU(P, U) : 
     # Values returned are wrong, never U's value
-    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR 
+    global G1, G2, G3, G4, G5, G6, G7, G8, CL, CR , config
     NRITER = 20 # Not really sure but it's my best guess
     TOLPRE = 1.0E-6
     
