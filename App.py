@@ -189,7 +189,6 @@ class Application (Tk):
                 self.canvas.draw()
                 self.t.configure(text="t = "+str(round(self.T,5))+" s")
 
-     
 
     def Afficher_graphes(self):
         self.axes_rho.set_visible(self.graphes.get())
