@@ -12,6 +12,8 @@ class Riemann ():
         self.rho_sup = rho_sup
         self.P_inf = P_inf
         self.P_sup = P_sup
+        self.u_inf = v_inf
+        self.u_sup = v_sup
 
         self.G1 = (gamma-1)/(2*gamma)
         self.G2 = (gamma+1)/(2*gamma)
@@ -44,6 +46,21 @@ class Riemann ():
             self.PM = self.PPV
         else :
             if self.PPV < self.PMIN :
-                self.PQ = (self.PL/self.PR)**self.G1
-                self.UM = (self.PQ*self.UL/self.CL + self.UR/self.CR + self.G4*(self.PQ-1))/(self.PQ/self.CL+1./self.CR)
-                self.PTL = 1+self.G7*(self.UL - self.UM)
+                self.PQ = (self.P_inf/self.P_sup)**self.G1
+                self.UM = (self.PQ*self.u_inf/self.CL + self.u_sup/self.CR + self.G4*(self.PQ-1))/(self.PQ/self.CL+1./self.CR)
+                self.PTL = 1+self.G7*(self.u_inf - self.UM)/self.CL
+                self.PTR = 1+self.G7*(self.UM - self.u_sup)/self.CL
+                self.PM = 0.5*(self.P_inf*self.PTL**self.G6 + self.PR*self.PTR**self.G3)
+            else: 
+                self.GEL = sqrt((self.G5/self.rho_inf)/(self.G6*self.P_inf + self.PPV))
+                self.GER = sqrt((self.G5/self.rho_sup)/(self.G6*self.P_sup + self.PPV))
+                self.PM = (self.GEL*self.P_inf + self.GER*self.PR - (self.u_sup - self.u_inf)) / (self.GEL+self.GER)
+
+        return self.PM
+
+
+
+
+
+
+
