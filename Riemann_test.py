@@ -45,5 +45,5 @@ class Riemann ():
         else :
             if self.PPV < self.PMIN :
                 self.PQ = (self.PL/self.PR)**self.G1
-                self.UM = (self.PQ*self.UL/self.CL + self.UR/self.CR + self.G4*(slf.PQ-1))/(self.PQ/self.CL+1./self.CR)
+                self.UM = (self.PQ*self.UL/self.CL + self.UR/self.CR + self.G4*(self.PQ-1))/(self.PQ/self.CL+1./self.CR)
                 self.PTL = 1+self.G7*(self.UL - self.UM)
