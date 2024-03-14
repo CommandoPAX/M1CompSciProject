@@ -13,7 +13,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from Core.Physics import *
 from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
-from Riemann_Solver.Riemann_Solver import*
+from Core.Riemann_Solver import*
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
 import os
@@ -189,7 +189,12 @@ class Application (Tk):
             Res = U_a_la_moins_un(self.U)
         else :
             self.T += 0.001
+<<<<<<< HEAD
             Res = Riemann_Solver(self.T).U
+=======
+            Riemann_Sim = Riemann_Solver()
+            Res = Riemann_Sim.Evol(self.T)
+>>>>>>> 95254e62a92bd619bab10f41e690abac98cf4955
 
         self.Conditions_bord()
 

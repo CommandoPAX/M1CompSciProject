@@ -6,7 +6,7 @@ from Core.Plot_Handler import *
 from Core.Config_Loader import Config_Loader
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
-from Riemann_Solver.Riemann_Solver import Riemann
+from Core.Riemann_Solver import *
 
 
 if __name__ == "__main__" :
