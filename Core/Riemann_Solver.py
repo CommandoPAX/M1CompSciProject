@@ -4,7 +4,7 @@ from Core.Config_Loader import Config_Loader
 import numpy as np
 
 class Riemann_Solver() : 
-    def __init__(self) : 
+    def __init__(self, c_name) : 
         config = Config_Loader()
 
         # Compute Gamma related constants
