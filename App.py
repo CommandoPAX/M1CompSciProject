@@ -199,7 +199,6 @@ class Application (Tk):
             u = data["u"].to_numpy()
             rho = data["rho"].to_numpy()
 
-            print(P)
             X = np.linspace(0,1,num=len(P))
 
             U_int = 2*P/rho
@@ -341,11 +340,9 @@ class Application (Tk):
         self.ouvrir_conf(self.nom_fichier)
 
     def output (self) :
-        try:
-            fichier = open("./output/"+self.nom_fichier[:-5]+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
-        except:
-            os.system("mkdir ./output/"+self.nom_fichier[:-5])
-            fichier = open("./output/"+self.nom_fichier+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
+        os.system("mkdir ./output/"+self.nom_fichier[:-5])
+
+        fichier = open("./output/"+self.nom_fichier[:-5]+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
 
         fichier.write("flux : "+str(self.flux.get())+"\n")
         fichier.write("Conditions initiales : "+str(self.nom_fichier)+"\n\n")
