@@ -32,6 +32,7 @@ class Riemann_Solver() :
         self.n = config.DATA["n_cell"]
         self.L = config.DATA["L"]
 
+                
     def SAMPLE(self, PM, UM, S) : 
         
         if S <= UM :

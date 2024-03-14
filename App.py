@@ -16,6 +16,7 @@ from Core.Config_Loader import Config_Loader
 from Core.Riemann_Solver import*
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
+import os
 
 
 class Application (Tk):
@@ -29,7 +30,7 @@ class Application (Tk):
         self.t = Label(self,text="t = 0",font="Arial 20",pady = 10)
         self.t.grid(row=0,column=1)
 
-        self.frame_graphes = Frame(self, borderwidth =2,padx = 10, pady = 10)
+        self.frame_graphes = Frame(self, borderwidth =2,padx = 10, pady = 20)
         self.frame_graphes.grid(row = 1, column =1,rowspan=100)
 
         self.axes_rho = self.fig.add_subplot(221)
@@ -84,6 +85,7 @@ class Application (Tk):
         Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux).grid(row = 1, column = 1)
         Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux).grid(row = 2, column = 1)
         Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux).grid(row = 3, column = 1)
+        Radiobutton(self.Frame_flux,text="Godunov",value="Riemann",variable=self.flux).grid(row = 4, column = 1)    #Ne fonctionne pas pour l'instant
 
         self.Frame_config = LabelFrame(self,text="Conditions initiales")
         self.Frame_config.grid(column=2,row=2)
@@ -92,17 +94,33 @@ class Application (Tk):
         Button(self.Frame_config,text="Ouvrir",command=self.ouvrir_conf).grid(row=2)
 
         self.Frame_animation = LabelFrame(self,text="Animation")
-        self.Frame_animation.grid(row =3,column=2,pady=20,padx=10)
+        self.Frame_animation.grid(row =3,column=2,pady=10,padx=10)
 
-        self.graphes = BooleanVar() # Ne fonctionne pas pour l'instant
+        self.graphes = BooleanVar() 
 
         Checkbutton(self.Frame_animation, text="Afficher les graphiques",onvalue=True,offvalue=False,variable=self.graphes,command=self.Afficher_graphes).grid(row=1,column=0,pady=5,padx=5,columnspan=2)
         self.graphes.set(True)
 
         Label(self.Frame_animation,text = "Plot toutes les ").grid(row=2,column = 0,padx =0 )
         self.step = Spinbox(self.Frame_animation,from_=1,to=1e10,width=6)
+        self.step.insert(END,"0")
         self.step.grid(row=2,column=1)
-        Label(self.Frame_animation,text = "itérations").grid(row=2,column = 2,padx =0,pady=10 )
+        Label(self.Frame_animation,text = "itérations").grid(row=2,column = 2,padx =0 )
+        Label(self.Frame_animation,text="S'arrêter à t = ").grid(row=3,column=0,pady=10)
+        self.t_stop = Entry(self.Frame_animation,width=7)
+        self.t_stop.grid(row=3,column=1)
+        Label(self.Frame_animation,text="s").grid(row=3,column=2)
+
+        self.t_stop.insert(END, "0.25")
+
+
+        self.Frame_output = LabelFrame(self,text="Output")
+
+        Label(self.Frame_output, text="Nombre de fichiers de sorties : ").grid(row=0,column=0,padx =10,pady=10)
+        self.N_sorties = Spinbox(self.Frame_output, from_= 1, to= 1e10,width = 7)
+        self.N_sorties.grid(row=0,column=1,padx =10)
+
+        self.Frame_output.grid(row =4,column=2,pady=10,padx=10)
 
 
     def Conditions_bord (self):
@@ -140,6 +158,23 @@ class Application (Tk):
 
     def lancer(self):
         self.stop = False
+        self.plot_finis = 0
+        try :
+            self.tmax = float(self.t_stop.get())
+        except:
+            self.tmax = 0.25
+            showwarning("Erreur", "Tmax doit être un float\nReglage à 0.25 s par défaut")
+            self.t_stop.delete(ALL)
+            self.t_stop.insert(END,"0.25")
+
+        try:
+            self.Nplot = int(self.N_sorties.get())
+        except:
+            self.Nplot = 1
+            showwarning("Erreur", "Le nombre de sorties doit être entier\nReglage à 1 par défaut")
+            self.t_stop.delete(ALL)
+            self.t_stop.insert(END,"1")
+
         self.Simulation()
 
     def Simulation(self):
@@ -159,6 +194,10 @@ class Application (Tk):
 
         self.Conditions_bord()
 
+        if self.T > self.tmax / self.Nplot  and self.Nplot  /(self.tmax/self.T) > self.plot_finis +1:
+            self.output()
+            self.plot_finis +=1
+
         if self.graphes.get() :
             if self.n % int(self.step.get()) == 0 :  # Ne plot pas à chaque étape pour accélérer les calculs
 
@@ -171,13 +210,13 @@ class Application (Tk):
                 self.t.configure(text="t = "+str(round(self.T,5))+" s")
 
 
-            if self.T < 0.25 and not self.stop :
+            if self.T < self.tmax and not self.stop :
                 self.after(1,self.Simulation)
             else :
                 self.canvas.draw()
                 self.t.configure(text="t = "+str(round(self.T,5))+" s")  
         else :     
-            if self.T < 0.25 and not self.stop :
+            if self.T < self.tmax and not self.stop :
                 self.Simulation()
             else :
                 showinfo("Fin","Fin")
@@ -190,7 +229,6 @@ class Application (Tk):
                 self.canvas.draw()
                 self.t.configure(text="t = "+str(round(self.T,5))+" s")
 
-     
 
     def Afficher_graphes(self):
         self.axes_rho.set_visible(self.graphes.get())
@@ -205,6 +243,22 @@ class Application (Tk):
 
     def T0(self):
         self.ouvrir_conf(self.nom_fichier)
+
+    def output (self) :
+        try:
+            fichier = open("./output/"+self.nom_fichier[:-5]+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
+        except:
+            os.system("mkdir ./output/"+self.nom_fichier[:-5])
+            fichier = open("./output/"+self.nom_fichier+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
+
+        fichier.write("flux : "+str(self.flux.get())+"\n")
+        fichier.write("Conditions initiales : "+str(self.nom_fichier)+"\n\n")
+        fichier.write("n_cell rho u P\n")
+
+        for i in range(self.n_cell):
+            fichier.write(str(i) + " "+ str(self.rho[i])+" "+str(self.u[i])+" "+str(self.P[i])+"\n")
+
+        fichier.close()
 
     def ouvrir_conf (self, fichier = ""):
         if fichier == "" : fichier = askopenfilename (filetypes=[('Fichiers .json','.json'),('Tous les fichiers','.*')],initialdir="./Config")
