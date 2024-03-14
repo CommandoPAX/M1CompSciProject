@@ -194,7 +194,7 @@ class Application (Tk):
 
         self.Conditions_bord()
 
-        if self.T > self.tmax / self.Nplot  and self.Nplot  /(self.tmax/self.T) > self.plot_finis +1:
+        if self.T >= self.tmax / self.Nplot  and self.Nplot  /(self.tmax/self.T) >= self.plot_finis +1:
             self.output()
             self.plot_finis +=1
 
