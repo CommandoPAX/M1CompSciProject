@@ -1,7 +1,6 @@
 # Riemann solver based on the fortran program in Toro 1999
 
 from Core.Config_Loader import Config_Loader
-from Riemann_Solver.subroutine import *
 import numpy as np
 
 class Riemann_Solver() : 
@@ -193,13 +192,13 @@ class Riemann_Solver() :
         NRITER = 20 # Not really sure but it's my best guess
         TOLPRE = 1.0E-6
         
-        PSTART = GUESSP()
+        PSTART = self.GUESSP()
         POLD = PSTART
         UDIFF = self.UR - self.UL
         
         for i in range(1, NRITER) : 
-            FL, FLD, POLD, self.DL, self.PL, self.CL = PREFUN(POLD, self.DL, self.PL, self.CL) # I have added self. on these lines
-            FR, FRD, POLD, self.DR, self.PR, self.CR = PREFUN(POLD, self.DR, self.PR, self.CR) # But it might be a mistake
+            FL, FLD, POLD, self.DL, self.PL, self.CL = self.PREFUN(POLD, self.DL, self.PL, self.CL) # I have added self. on these lines
+            FR, FRD, POLD, self.DR, self.PR, self.CR = self.PREFUN(POLD, self.DR, self.PR, self.CR) # But it might be a mistake
             P = POLD - ((FL + FR + UDIFF)/(FLD + FRD))
 
             CHANGE = 2.0 * abs((P-POLD)/(P+POLD))
@@ -231,7 +230,7 @@ class Riemann_Solver() :
             # Exact solution for presure and velocity in star region is found 
             PM = 0 
             UM = 0
-            PM, UM = STARPU(PM, UM)
+            PM, UM = self.STARPU(PM, UM)
             dx = self.L/self.n
             
             # Complete solution at time TIMEOUT is found
@@ -240,7 +239,7 @@ class Riemann_Solver() :
                 S = (XPOS - DIAPH)/TIMEOUT 
                 
                 # Solution at point (X,T) = (XPOS - DIAPH, TIMEOUT) is found
-                U[i, 0], U[i, 1], U[i, 2] = SAMPLE(PM, UM, S)
+                U[i, 0], U[i, 1], U[i, 2] = self.SAMPLE(PM, UM, S)
                 
             return U
 >>>>>>> 95254e62a92bd619bab10f41e690abac98cf4955:Core/Riemann_Solver.py
