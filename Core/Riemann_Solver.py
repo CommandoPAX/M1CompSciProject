@@ -4,8 +4,8 @@ from Core.Config_Loader import Config_Loader
 import numpy as np
 
 class Riemann_Solver() : 
-    def __init__(self) : 
-        config = Config_Loader()
+    def __init__(self, c_name) : 
+        config = Config_Loader(c_name)
 
         # Compute Gamma related constants
         self.G1 = (config.DATA["gamma"]-1)/(2*config.DATA["gamma"])
