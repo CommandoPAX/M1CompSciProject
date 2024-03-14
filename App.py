@@ -189,12 +189,8 @@ class Application (Tk):
             Res = U_a_la_moins_un(self.U)
         else :
             self.T += 0.001
-<<<<<<< HEAD
-            Res = Riemann_Solver(self.T).U
-=======
             Riemann_Sim = Riemann_Solver()
             Res = Riemann_Sim.Evol(self.T)
->>>>>>> 95254e62a92bd619bab10f41e690abac98cf4955
 
         self.Conditions_bord()
 
