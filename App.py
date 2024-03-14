@@ -189,7 +189,7 @@ class Application (Tk):
             Res = U_a_la_moins_un(self.U)
         else :
             self.T += 0.001
-            Riemann_Sim = Riemann_Solver()
+            Riemann_Sim = Riemann_Solver(self.nom_fichier[:-5])
             Res = Riemann_Sim.Evol(self.T)
 
         self.Conditions_bord()
