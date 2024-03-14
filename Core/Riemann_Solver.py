@@ -190,7 +190,7 @@ class Riemann_Solver() :
 
         return P, U #Will only return a non-0 value for U if CHANGE <= TOLPRE was validated once, currently it does not
 
-    def Riemann(self, t) :
+    def Evol(self, t) :
         # We test for the intial pressure conditions 
 
         TIMEOUT = t #seconds (maybe)
