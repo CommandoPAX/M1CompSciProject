@@ -162,3 +162,4 @@ cython_debug/
 # Our files 
 Graphes/GRAPHIQUE.png
 Graphes/*
+output/*
