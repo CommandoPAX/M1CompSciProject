@@ -4,33 +4,50 @@ from Core.Config_Loader import Config_Loader
 import numpy as np
 
 class Riemann_Solver() : 
-    def __init__(self, c_name) : 
+    def __init__(self, c_name : str, Is_Godunov : bool = False, Densities : list = [0,0], Velocities : list = [0,0], Pressure : list = [0,0]) : 
         config = Config_Loader(c_name)
+        
+        self.G = config.DATA["gamma"]
 
         # Compute Gamma related constants
-        self.G1 = (config.DATA["gamma"]-1)/(2*config.DATA["gamma"])
-        self.G2 = (config.DATA["gamma"]+1)/(2*config.DATA["gamma"])
-        self.G3 = 2*config.DATA["gamma"]/(config.DATA["gamma"]-1)
-        self.G4 = 2/(config.DATA["gamma"]-1)
-        self.G5 = 2/(config.DATA["gamma"]+1)
-        self.G6 = (config.DATA["gamma"]-1)/(config.DATA["gamma"]+1)
-        self.G7 = (config.DATA["gamma"]-1)/2
-        self.G8 = config.DATA["gamma"]-1
+        self.G1 = (self.G-1)/(2*self.G)
+        self.G2 = (self.G+1)/(2*self.G)
+        self.G3 = 2*self.G/(self.G-1)
+        self.G4 = 2/(self.G-1)
+        self.G5 = 2/(self.G+1)
+        self.G6 = (self.G-1)/(self.G+1)
+        self.G7 = (self.G-1)/2
+        self.G8 = self.G-1
 
-        # Compute sound speeds 
-        self.CL = np.sqrt(config.DATA["gamma"]*config.DATA["P_inf"]/config.DATA["rho_inf"])
-        self.CR = np.sqrt(config.DATA["gamma"]*config.DATA["P_sup"]/config.DATA["rho_sup"])
-        
-        # Useful values 
-        self.DL = config.DATA["rho_inf"]
-        self.DR = config.DATA["rho_sup"]
-        self.PL = config.DATA["P_inf"]
-        self.PR = config.DATA["P_sup"]
-        self.UL = config.DATA["u_inf"]
-        self.UR = config.DATA["u_sup"]
-        self.G = config.DATA["gamma"]
-        self.n = config.DATA["n_cell"]
-        self.L = config.DATA["L"]
+        if Is_Godunov != True : 
+            # Compute sound speeds 
+            self.CL = np.sqrt(self.G*config.DATA["P_inf"]/config.DATA["rho_inf"])
+            self.CR = np.sqrt(self.G*config.DATA["P_sup"]/config.DATA["rho_sup"])
+            
+            # Useful values 
+            self.DL = config.DATA["rho_inf"]
+            self.DR = config.DATA["rho_sup"]
+            self.PL = config.DATA["P_inf"]
+            self.PR = config.DATA["P_sup"]
+            self.UL = config.DATA["u_inf"]
+            self.UR = config.DATA["u_sup"]
+            self.n = config.DATA["n_cell"]
+            self.L = config.DATA["L"]
+            
+        else :  
+            # Compute sound speeds 
+            self.CL = np.sqrt(self.G*Pressure[0]/Densities[0])
+            self.CR = np.sqrt(self.G*Pressure[1]/Densities[1])
+            
+            # Useful values 
+            self.DL = Densities[0]
+            self.DR = Densities[1]
+            self.PL = Pressure[0]
+            self.PR = Pressure[1]
+            self.UL = Velocities[0]
+            self.UR = Velocities[1]
+            self.n = 2
+            self.L = self.n * (config.DATA["L"] / config.DATA["n_cell"])
 
                 
     def SAMPLE(self, PM, UM, S) : 
