@@ -17,6 +17,7 @@ from Core.Riemann_Solver import*
 from Flux_Solver.Lax_Friedrich import*
 from Core.Conservative_State_Solver import*
 import os
+import pandas as pd
 
 
 class Application (Tk):
@@ -122,6 +123,100 @@ class Application (Tk):
 
         self.Frame_output.grid(row =4,column=2,pady=10,padx=10)
 
+
+        self.menubar = Menu(self)
+
+        menu1 = Menu(self.menubar, tearoff=0)
+        menu1.add_command(label="Ouvrir une simulation", command=self.Plotter)
+        menu1.add_command(label="Genere un fichier de config", command=self.generer_config)
+
+        menu1.add_separator()
+        menu1.add_command(label="Quitter", command=self.destroy)
+        self.menubar.add_cascade(label="Options", menu=menu1)
+
+        menu2 = Menu(self.menubar, tearoff=0)
+        menu2.add_command(label="Aide")
+        self.menubar.add_cascade(label="Aide", menu=menu2)
+
+        self.config(menu=self.menubar)
+
+    def Plotter(self):
+
+        self.fen_plot=Toplevel(self)
+
+        self.fig_plot = Figure(figsize=(8,8), dpi=100)
+
+        X = np.linspace(0,1)
+
+        self.frame_graphes_plot = Frame(self.fen_plot, borderwidth =2,padx = 10, pady = 20)
+        self.frame_graphes_plot.grid(row = 1, column =1)
+
+        self.axes_rho_plot = self.fig_plot.add_subplot(221)
+        self.axes_rho_plot.set_xlabel("X [m]")
+        self.axes_rho_plot.set_ylabel("rho")
+
+
+        # Velocity
+        self.axes_u_plot = self.fig_plot.add_subplot(222)
+        self.axes_u_plot.set_xlabel("X [m]")
+        self.axes_u_plot.set_ylabel("u [m/s]")
+        
+        # Pressure
+        self.axes_P_plot = self.fig_plot.add_subplot(223)
+        self.axes_P_plot.set_xlabel("X [m]")
+        self.axes_P_plot.set_ylabel("P")
+
+        
+        # Internal Energy
+        self.axes_U_plot = self.fig_plot.add_subplot(224)
+        self.axes_U_plot.set_xlabel("X [m]")
+        self.axes_U_plot.set_ylabel("U_int")
+
+        self.canvas_plot = FigureCanvasTkAgg(self.fig_plot, self.frame_graphes_plot)
+        self.canvas_plot.draw()
+        self.canvas_plot.get_tk_widget().pack()
+
+        toolbar = NavigationToolbar2Tk(self.canvas_plot, self.frame_graphes_plot)
+        toolbar.update()
+        self.canvas_plot._tkcanvas.pack()
+
+        Button(self.fen_plot,text = "Ouvrir", command = self.tracer).grid(row=1,column=2,padx = 20)
+
+    def tracer(self):
+        fichier = askopenfilename(filetypes=[('Fichiers textes','.txt')], initialdir="./output")
+        if fichier :
+            data = pd.read_csv(fichier,skiprows=3,index_col="n_cell",delimiter=" ")
+
+            split = fichier.split("/")
+            label = split[len(split)-1]
+
+            flux = label.split("_")[-2]
+            t = label.split("_")[-1][:-4]
+
+            label = flux+", t = "+str(round(float(t),3))+" s"
+
+            P = data["P"].to_numpy()
+            u = data["u"].to_numpy()
+            rho = data["rho"].to_numpy()
+
+            X = np.linspace(0,1,num=len(P))
+
+            U_int = 2*P/rho
+
+            self.axes_rho_plot.plot(X,rho,label=label)
+            self.axes_u_plot.plot(X,u,label=label)
+            self.axes_P_plot.plot(X,P,label=label)
+            self.axes_U_plot.plot(X,U_int,label=label)
+
+            self.axes_rho_plot.legend()
+            self.axes_u_plot.legend()
+            self.axes_P_plot.legend()
+            self.axes_U_plot.legend()
+
+            self.canvas_plot.draw()
+
+    def generer_config(self):
+        pass
 
     def Conditions_bord (self):
 
@@ -245,11 +340,9 @@ class Application (Tk):
         self.ouvrir_conf(self.nom_fichier)
 
     def output (self) :
-        try:
-            fichier = open("./output/"+self.nom_fichier[:-5]+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
-        except:
-            os.system("mkdir ./output/"+self.nom_fichier[:-5])
-            fichier = open("./output/"+self.nom_fichier+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
+        os.system("mkdir ./output/"+self.nom_fichier[:-5])
+
+        fichier = open("./output/"+self.nom_fichier[:-5]+"/"+self.nom_fichier[:-5]+"_"+str(self.flux.get())+"_"+str(round(self.T,5))+".txt","w")
 
         fichier.write("flux : "+str(self.flux.get())+"\n")
         fichier.write("Conditions initiales : "+str(self.nom_fichier)+"\n\n")
