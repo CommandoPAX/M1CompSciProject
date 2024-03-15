@@ -7,7 +7,7 @@ class Riemann_Solver() :
     def __init__(self, c_name : str, Is_Godunov : bool = False, Densities : list = [0,0], Velocities : list = [0,0], Pressure : list = [0,0]) : 
         config = Config_Loader(c_name)
         
-        self.G = config.DATA["gamma"]
+        self.G = config["gamma"]
 
         # Compute Gamma related constants
         self.G1 = (self.G-1)/(2*self.G)
@@ -21,18 +21,18 @@ class Riemann_Solver() :
 
         if Is_Godunov != True : 
             # Compute sound speeds 
-            self.CL = np.sqrt(self.G*config.DATA["P_inf"]/config.DATA["rho_inf"])
-            self.CR = np.sqrt(self.G*config.DATA["P_sup"]/config.DATA["rho_sup"])
+            self.CL = np.sqrt(self.G*config["P_inf"]/config["rho_inf"])
+            self.CR = np.sqrt(self.G*config["P_sup"]/config["rho_sup"])
             
             # Useful values 
-            self.DL = config.DATA["rho_inf"]
-            self.DR = config.DATA["rho_sup"]
-            self.PL = config.DATA["P_inf"]
-            self.PR = config.DATA["P_sup"]
-            self.UL = config.DATA["u_inf"]
-            self.UR = config.DATA["u_sup"]
-            self.n = config.DATA["n_cell"]
-            self.L = config.DATA["L"]
+            self.DL = config["rho_inf"]
+            self.DR = config["rho_sup"]
+            self.PL = config["P_inf"]
+            self.PR = config["P_sup"]
+            self.UL = config["u_inf"]
+            self.UR = config["u_sup"]
+            self.n = config["n_cell"]
+            self.L = config["L"]
             
         else :  
             # Compute sound speeds 
@@ -47,7 +47,7 @@ class Riemann_Solver() :
             self.UL = Velocities[0]
             self.UR = Velocities[1]
             self.n = 2
-            self.L = self.n * (config.DATA["L"] / config.DATA["n_cell"])
+            self.L = self.n * (config["L"] / config["n_cell"])
 
                 
     def SAMPLE(self, PM, UM, S) : 

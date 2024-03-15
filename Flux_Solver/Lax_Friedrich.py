@@ -1,12 +1,8 @@
 # Solves the Lax-Friedrich flux
 
 import numpy as np
-from Core.Config_Loader import Config_Loader
 from Core.Physics import*
 
-config = Config_Loader()
-n_cell = config.DATA["n_cell"]
-    
 
 def F12_Friedrich (U : np.array, dx, dt : float, signe : str ="+"):
     

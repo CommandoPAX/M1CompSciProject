@@ -4,9 +4,9 @@ import numpy as np
 from Core.Config_Loader import Config_Loader
 
 config = Config_Loader()
-gamma = config.DATA["gamma"]
-n_cell = config.DATA["n_cell"]
-C_Var = config.DATA["C"]
+gamma = config["gamma"]
+n_cell = config["n_cell"]
+C_Var = config["C"]
 
 def P_(rho : np.array, K : float) :
     """ 

@@ -35,3 +35,6 @@ class Config_Loader() :
             json.dump(self.DATA, outf, indent=4, separators=(", ", ": "), sort_keys=True, skipkeys=True, ensure_ascii=False)
                 
         print(f"Configuration changed sucesfully to {output_name}")
+        
+    def __getitem__(self, x) :
+        return self.DATA[x]

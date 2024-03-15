@@ -5,7 +5,7 @@ from Core.Physics import *
 from Core.Config_Loader import Config_Loader
 
 config = Config_Loader()
-gamma = config.DATA["gamma"]
+gamma = config["gamma"]
 
 def Create_Plots(X : np.array, W : np.array, output : str = "GRAPHIQUE"):
     """ 
