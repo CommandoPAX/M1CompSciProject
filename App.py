@@ -249,7 +249,8 @@ class Application (Tk):
     def maj_echelle (self, axes, var) :
         if var.any() !=0 :
             dy = np.max(var) - np.min(var)
-            axes.set_ylim(np.min(var) - dy/10, np.max(var)+dy/10)
+            if dy != 0 :
+                axes.set_ylim(np.min(var) - dy/10, np.max(var)+dy/10)
 
     def lancer(self):
         self.stop = False
