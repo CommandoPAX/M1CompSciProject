@@ -19,7 +19,7 @@ class Riemann_Solver() :
         self.G7 = (self.G-1)/2
         self.G8 = self.G-1
 
-        if Is_Godunov != True : 
+        if Is_Godunov == False : 
             # Compute sound speeds 
             self.CL = np.sqrt(self.G*config["P_inf"]/config["rho_inf"])
             self.CR = np.sqrt(self.G*config["P_sup"]/config["rho_sup"])
@@ -46,7 +46,7 @@ class Riemann_Solver() :
             self.PR = Pressure[1]
             self.UL = Velocities[0]
             self.UR = Velocities[1]
-            self.n = 2
+            self.n = 10
             self.L = self.n * (config["L"] / config["n_cell"])
 
                 
