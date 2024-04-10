@@ -86,7 +86,7 @@ class Application (Tk):
         Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux).grid(row = 1, column = 1)
         Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux).grid(row = 2, column = 1)
         Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux).grid(row = 3, column = 1)
-        Radiobutton(self.Frame_flux,text="Godunov",value="Riemann",variable=self.flux).grid(row = 4, column = 1)    #Ne fonctionne pas pour l'instant
+        Radiobutton(self.Frame_flux,text="Godunov",value="Godunov",variable=self.flux).grid(row = 4, column = 1)    #Ne fonctionne pas pour l'instant
 
         self.Frame_config = LabelFrame(self,text="Conditions initiales")
         self.Frame_config.grid(column=2,row=2)
@@ -279,15 +279,54 @@ class Application (Tk):
         
         dx = self.X[1]-self.X[0]
         
-        if flux != "Riemann" :
+        if flux in ("LF","LW"):
             self.T += delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
             self.U = U_next(self.U,dx,flux)
             Res = U_a_la_moins_un(self.U)
-        else :
+        if flux == "Riemann" :
             self.T += 0.001
             Riemann_Sim = Riemann_Solver(self.nom_fichier[:-5])
             Res = Riemann_Sim.Evol(self.T)
 
+        if flux == "Godunov" :
+            dt = 0.001
+            self.T += dt
+
+            Res = np.zeros((self.n_cell,3))
+
+            for i in range(1,len(self.u)-1):
+
+                #print("\n\n x = "+str(i))
+
+                u_i = self.u[i-1]
+                u_f = self.u[i+1]
+
+                p_i = self.P[i-1]
+                p_f = self.P[i+1]
+
+                r_i = self.rho[i-1]
+                r_f = self.rho[i+1]
+
+                Riemann_intermediaire = Riemann_Solver(self.nom_fichier[:-5],Is_Godunov=True, Densities=[r_i,r_f],Velocities=[u_i,u_f],Pressure=[p_i,p_f])
+                Res_int = Riemann_intermediaire.Evol(dt)
+                rho_int = Res_int[:,0]
+                u_int = Res_int[:,1]
+                P_int = Res_int[:,2]
+
+                Res[i]=np.array([np.mean(rho_int),np.mean(u_int),np.mean(P_int)])
+
+                #print("rho : "+str(rho_int))
+                #print("u : "+str(u_int))
+                #print("P : "+str(P_int))
+            
+            rho_int = Res_int[:,0]
+            u_int = Res_int[:,1]
+            P_int = Res_int[:,2]
+            self.U= U_(rho_int,u_int,P_int)
+            self.U = U_next(self.U,dx,"LF")
+
+
+        print(Res)
         self.Conditions_bord()
 
         if self.T >= self.tmax / self.Nplot  and self.Nplot  /(self.tmax/self.T) >= self.plot_finis +1:
