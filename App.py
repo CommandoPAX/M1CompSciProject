@@ -295,7 +295,7 @@ class Application (Tk):
 
             for i in range(1,len(self.u)-1):
 
-                print("\n\n x = "+str(i))
+                #print("\n\n x = "+str(i))
 
                 u_i = self.u[i-1]
                 u_f = self.u[i+1]
@@ -314,9 +314,9 @@ class Application (Tk):
 
                 Res[i]=np.array([np.mean(rho_int),np.mean(u_int),np.mean(P_int)])
 
-                print("rho : "+str(rho_int))
-                print("u : "+str(u_int))
-                print("P : "+str(P_int))
+                #print("rho : "+str(rho_int))
+                #print("u : "+str(u_int))
+                #print("P : "+str(P_int))
 
         self.Conditions_bord()
 
