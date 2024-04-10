@@ -7,7 +7,7 @@ import numpy as np
 from Core.Physics import*
 
 
-def F12_Godunov (U : np.array, dx, dt : float, n : int, signe : str ="+"):
+'''def F12_Godunov (U : np.array, dx, dt : float, n : int, signe : str ="+"):
     
     n_cell = len(U[:,0])
 
@@ -21,5 +21,6 @@ def F12_Godunov (U : np.array, dx, dt : float, n : int, signe : str ="+"):
         for i in range(n_cell):
             R[i] = (1/dt)*Integral(n*dt, (n+1)*dt, F_(U_RiemL(n))) #U_RiemR= Solution exact de Riemann au problème entre x_(i-1/2)
 
-    return R
+    return R'''
+    
 

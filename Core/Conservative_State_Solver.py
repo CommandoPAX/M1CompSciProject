@@ -24,6 +24,7 @@ def U_next(U : np.array, dx, intercell : str = "LF") :
         return np.array(U + (dt/dx)*(F12_Friedrich(U,dx,dt,signe="-") - F12_Friedrich(U,dx,dt,signe="+")))
     if intercell == "LW" :
         return np.array(U + (dt/dx)*(F12_Wendroff(U,dx,dt,signe="-") - F12_Wendroff(U,dx,dt,signe="+")))
-    #if intercell == "Go" : 
-        np.array(U - (dt/dx)*(F12_Godunov(U,dx,dt,signe="+")-F12_Godunov(U,dx,dt,signe="+"))) #U=moyenne de la solution de Riemann, va falloir modifier les noms de var pour que ça soit bon
-        return "Not yet implemented"
+    if intercell == "Go" : 
+        #np.array(U - (dt/dx)*(F12_Godunov(U,dx,dt,signe="+")-F12_Godunov(U,dx,dt,signe="+"))) #U=moyenne de la solution de Riemann, va falloir modifier les noms de var pour que ça soit bon
+        c=a_(P, rho)*(dt/dx)
+        return np.array(U+c*(U-np.roll(U,-1,1)))
