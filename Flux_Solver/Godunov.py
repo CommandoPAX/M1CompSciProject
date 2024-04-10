@@ -22,3 +22,4 @@ def F12_Godunov (U : np.array, dx, dt : float, n : int, signe : str ="+"):
             R[i] = (1/dt)*Integral(n*dt, (n+1)*dt, F_(U_RiemL(n))) #U_RiemR= Solution exact de Riemann au problème entre x_(i-1/2)
 
     return R
+
