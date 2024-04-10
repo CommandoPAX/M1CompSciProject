@@ -289,7 +289,8 @@ class Application (Tk):
             Res = Riemann_Sim.Evol(self.T)
 
         if flux == "Godunov" :
-            self.T += 0.001
+            dt = 0.001
+            self.T += dt
 
             Res = np.zeros((self.n_cell,3))
 
@@ -303,11 +304,11 @@ class Application (Tk):
                 p_i = self.P[i-1]
                 p_f = self.P[i+1]
 
-                r_i = self.P[i-1]
-                r_f = self.P[i+1]
+                r_i = self.rho[i-1]
+                r_f = self.rho[i+1]
 
                 Riemann_intermediaire = Riemann_Solver(self.nom_fichier[:-5],Is_Godunov=True, Densities=[r_i,r_f],Velocities=[u_i,u_f],Pressure=[p_i,p_f])
-                Res_int = Riemann_intermediaire.Evol(self.T)
+                Res_int = Riemann_intermediaire.Evol(dt)
                 rho_int = Res_int[:,0]
                 u_int = Res_int[:,1]
                 P_int = Res_int[:,2]
@@ -317,7 +318,15 @@ class Application (Tk):
                 #print("rho : "+str(rho_int))
                 #print("u : "+str(u_int))
                 #print("P : "+str(P_int))
+            
+            rho_int = Res_int[:,0]
+            u_int = Res_int[:,1]
+            P_int = Res_int[:,2]
+            self.U= U_(rho_int,u_int,P_int)
+            self.U = U_next(self.U,dx,"LF")
 
+
+        print(Res)
         self.Conditions_bord()
 
         if self.T >= self.tmax / self.Nplot  and self.Nplot  /(self.tmax/self.T) >= self.plot_finis +1:
