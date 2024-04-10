@@ -116,6 +116,16 @@ def derivee (f, x : np.array):
 
         return yp
 
+def Integral(f : np.array, dx : float): #test de fct integral, pas réellement adapté à ce cas pour le moment, à refaire
+    S=0
+    for i in range(np.size(f)-1):
+        S+=((f[i]+f[i+1])/2)*dx
+    return S
+
+def Mean(U : np.array, dx : float):
+    M=(1/dx)*(Integral(U))
+    return M
+
 def Err_(U1 : np.array, U2 : np.array):
     err=np.abs(U1-U2)
     return err
