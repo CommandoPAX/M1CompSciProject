@@ -47,7 +47,7 @@ class Riemann_Solver() :
             self.UL = Velocities[0]
             self.UR = Velocities[1]
             self.n = 10
-            self.L = self.n * (config["L"] / config["n_cell"])
+            self.L = (config["L"] / config["n_cell"])
 
                 
     def SAMPLE(self, PM, UM, S) : 
