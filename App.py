@@ -24,7 +24,7 @@ class Application (Tk):
     def __init__ (self):
         Tk.__init__(self)
         
-        self.fig = Figure(figsize=(5,5), dpi=100)
+        self.fig = Figure(figsize=(8,8), dpi=100)
 
         X = np.linspace(0,1)
 
@@ -36,22 +36,22 @@ class Application (Tk):
 
         self.axes_rho = self.fig.add_subplot(221)
         self.axes_rho.set_xlabel("X [m]")
-        self.axes_rho.set_ylabel("rho [kg/m^3]")
-        self.plot_rho, = self.axes_rho.plot([0,0],label="density")
+        self.axes_rho.set_ylabel(r"rho [kg/$m^3$]")
+        self.plot_rho, = self.axes_rho.plot([0,0],label="Density")
         self.axes_rho.legend()
 
         # Velocity
         self.axes_u = self.fig.add_subplot(222)
         self.axes_u.set_xlabel("X [m]")
         self.axes_u.set_ylabel("u [m/s]")
-        self.plot_u, = self.axes_u.plot([0,0],label="velocity")
+        self.plot_u, = self.axes_u.plot([0,0],label="Velocity")
         self.axes_u.legend()
         
         # Pressure
         self.axes_P = self.fig.add_subplot(223)
         self.axes_P.set_xlabel("X [m]")
         self.axes_P.set_ylabel("P [Pa]")
-        self.plot_P, = self.axes_P.plot([0,0],label="Pression")
+        self.plot_P, = self.axes_P.plot([0,0],label="Pressure")
         self.axes_P.legend()
         
         # Internal Energy
