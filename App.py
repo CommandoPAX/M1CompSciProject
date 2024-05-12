@@ -19,12 +19,15 @@ from Core.Conservative_State_Solver import*
 import os
 import pandas as pd
 
+font = {'size'   : 16}
+
+matplotlib.rc('font', **font)
 
 class Application (Tk):
     def __init__ (self):
         Tk.__init__(self)
         
-        self.fig = Figure(figsize=(8,8), dpi=100)
+        self.fig = Figure(figsize=(12,8), dpi=100)
 
         X = np.linspace(0,1)
 
