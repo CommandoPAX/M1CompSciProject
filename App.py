@@ -36,7 +36,7 @@ class Application (Tk):
 
         self.axes_rho = self.fig.add_subplot(221)
         self.axes_rho.set_xlabel("X [m]")
-        self.axes_rho.set_ylabel("rho")
+        self.axes_rho.set_ylabel("rho [kg/m^3]")
         self.plot_rho, = self.axes_rho.plot([0,0],label="density")
         self.axes_rho.legend()
 
@@ -50,14 +50,14 @@ class Application (Tk):
         # Pressure
         self.axes_P = self.fig.add_subplot(223)
         self.axes_P.set_xlabel("X [m]")
-        self.axes_P.set_ylabel("P")
+        self.axes_P.set_ylabel("P [Pa]")
         self.plot_P, = self.axes_P.plot([0,0],label="Pression")
         self.axes_P.legend()
         
         # Internal Energy
         self.axes_U = self.fig.add_subplot(224)
         self.axes_U.set_xlabel("X [m]")
-        self.axes_U.set_ylabel("U_int")
+        self.axes_U.set_ylabel("U_int [J]")
         self.plot_U, = self.axes_U.plot([0,0],label="Energie interne")
         self.axes_U.legend()
 
@@ -289,22 +289,22 @@ class Application (Tk):
             Res = Riemann_Sim.Evol(self.T)
 
         if flux == "Godunov" :
-            dt = 0.001
+            dt = delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
             self.T += dt
 
-            Res = np.zeros((self.n_cell,3))
+            F12 = np.zeros((self.n_cell,3))
 
-            for i in range(1,len(self.u)-1):
+            for i in range(0,len(self.u)-1):
 
                 #print("\n\n x = "+str(i))
 
-                u_i = self.u[i-1]
+                u_i = self.u[i]
                 u_f = self.u[i+1]
 
-                p_i = self.P[i-1]
+                p_i = self.P[i]
                 p_f = self.P[i+1]
 
-                r_i = self.rho[i-1]
+                r_i = self.rho[i]
                 r_f = self.rho[i+1]
 
                 Riemann_intermediaire = Riemann_Solver(self.nom_fichier[:-5],Is_Godunov=True, Densities=[r_i,r_f],Velocities=[u_i,u_f],Pressure=[p_i,p_f])
@@ -313,20 +313,27 @@ class Application (Tk):
                 u_int = Res_int[:,1]
                 P_int = Res_int[:,2]
 
-                Res[i]=np.array([np.mean(rho_int),np.mean(u_int),np.mean(P_int)])
+                test = F_(np.array([np.mean(rho_int),np.mean(u_int),np.mean(P_int)]))
+
+                F12[i][0]=test[0]
+                F12[i][1]=test[1]
+                F12[i][2]=test[2]
 
                 #print("rho : "+str(rho_int))
                 #print("u : "+str(u_int))
                 #print("P : "+str(P_int))
             
-            rho_int = Res_int[:,0]
-            u_int = Res_int[:,1]
-            P_int = Res_int[:,2]
-            self.U= U_(rho_int,u_int,P_int)
-            self.U = U_next(self.U,dx,"LF")
+            #F12 = F_(U_(F12[:,0],F12[:,1],F12[:,2]))
 
+            self.U += 0.5*dx/dt * (F12-np.roll(F12,1))
+            Res = U_a_la_moins_un(self.U)
+            self.rho = Res[:,0]
+            self.u = Res[:,1]
+            self.P = Res[:,2]
+            #self.U= U_(rho_int,u_int,P_int)
+            #print(np.shape(self.U))
+            #self.U = U_next(self.U,dx,"Godunov")
 
-        print(Res)
         self.Conditions_bord()
 
         if self.T >= self.tmax / self.Nplot  and self.Nplot  /(self.tmax/self.T) >= self.plot_finis +1:
