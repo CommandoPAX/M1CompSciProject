@@ -58,7 +58,7 @@ class Application (Tk):
         self.axes_U = self.fig.add_subplot(224)
         self.axes_U.set_xlabel("X [m]")
         self.axes_U.set_ylabel("U_int [J]")
-        self.plot_U, = self.axes_U.plot([0,0],label="Energie interne")
+        self.plot_U, = self.axes_U.plot([0,0],label="Internal energy")
         self.axes_U.legend()
 
         self.canvas = FigureCanvasTkAgg(self.fig, self.frame_graphes)
