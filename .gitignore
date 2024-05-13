@@ -163,3 +163,4 @@ cython_debug/
 Graphes/GRAPHIQUE.png
 Graphes/*
 output/*
+*.png
