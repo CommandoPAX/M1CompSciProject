@@ -16,4 +16,3 @@ P = np.ones((n_cell,n_cell))
 P[10,10] = 10
 
 plt.imshow(P)
-plt.show()
