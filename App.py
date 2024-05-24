@@ -215,8 +215,6 @@ class Application (Tk):
         Lx = int(self.canvas_exp.get_tk_widget()["width"])
         Ly = int(self.canvas_exp.get_tk_widget()["height"])
 
-        print(event.x,event.y)
-
         y = int(event.x/Lx * 50) 
         x = int(event.y/Ly * 50) 
 
