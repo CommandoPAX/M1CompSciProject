@@ -198,7 +198,7 @@ class Application (Tk):
 
 
     def stop_exp(self):
-        self.flag = True
+        self.flag = False
 
     def reset_exp(self):
         self.flag = False
