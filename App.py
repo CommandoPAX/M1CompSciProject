@@ -131,7 +131,10 @@ class Application (Tk):
 
         menu1 = Menu(self.menubar, tearoff=0)
         menu1.add_command(label="Ouvrir une simulation", command=self.Plotter)
-        menu1.add_command(label="Genere un fichier de config", command=self.generer_config)
+        #menu1.add_command(label="Genere un fichier de config", command=self.generer_config)
+
+        menu1.add_command(label="Explosions", command=self.explosions)
+
 
         menu1.add_separator()
         menu1.add_command(label="Quitter", command=self.destroy)
@@ -142,6 +145,116 @@ class Application (Tk):
         self.menubar.add_cascade(label="Aide", menu=menu2)
 
         self.config(menu=self.menubar)
+
+    def explosions(self):
+        self.fen = Toplevel(self)
+        
+        self.fig_exp = Figure(figsize=(8,8), dpi=100)
+
+        X = np.linspace(0,1)
+
+        self.frame_graphes_exp = Frame(self.fen, borderwidth =2,padx = 10, pady = 20)
+        self.frame_graphes_exp.grid(row = 1, column =1)
+
+        self.axes_P_exp = self.fig_exp.add_subplot(title="P [Pa]")
+        self.axes_P_exp.set_xlabel("Y [m]")
+        self.axes_P_exp.set_ylabel("X [m]")
+
+        self.canvas_exp = FigureCanvasTkAgg(self.fig_exp, self.frame_graphes_exp)
+        self.canvas_exp.draw()
+        self.canvas_exp.get_tk_widget().pack()   
+
+        toolbar = NavigationToolbar2Tk(self.canvas_exp, self.frame_graphes_exp)
+        toolbar.update()
+        self.canvas_exp._tkcanvas.pack()
+
+        Label (self.fen,text="Cliquez pour faire une explosion",font="Arial 20").grid(row=0,column=1)
+
+        self.rho_exp = np.ones((50,50))
+        self.ux_exp = np.zeros((50,50))
+        self.uy_exp = np.zeros((50,50))
+        self.P_exp = np.ones((50,50))
+
+        plot_p = self.axes_P_exp.imshow(self.P_exp,vmin=1,vmax=10,cmap="hot")
+        self.fig_exp.colorbar(plot_p)
+
+        self.axes_P_exp.legend()
+        self.flag = False
+
+        Button(self.fen,text="Stop",command=self.stop_exp).grid(row=1,column=2,padx = 20)
+
+
+        self.canvas_exp.get_tk_widget().bind("<Button-1>",self.exploser)
+
+    def stop_exp(self):
+        self.flag = True
+
+    def exploser(self,event):
+
+        self.fen.update()
+        Lx = int(self.canvas_exp.get_tk_widget()["width"])
+        Ly = int(self.canvas_exp.get_tk_widget()["height"])
+
+        x = int(event.x/Lx * 50)
+        y = int(event.y/Ly * 50)
+
+        xmin= max(0,x-10)
+        xmax = min(49,x+10)
+        ymin= max(0,y-10)
+        ymax = min(49,y+10)
+
+        self.step = 0
+
+        self.P_exp[xmin:xmax,ymin:ymax] +=9 
+        #self.P_exp[ymin,ymax] +=9 
+
+        print(self.P_exp,np.max(self.P))
+
+        if self.flag == False:
+            self.flag = True
+            self.animation_explosion()
+
+    def animation_explosion(self):
+
+        if self.step % 10 == 0:
+            self.axes_P_exp.imshow(self.P_exp,vmin=1,vmax=10,cmap="hot")
+            self.canvas_exp.draw()
+        #fen.after(10)
+
+        self.step +=1
+        
+
+        for i in range(50):
+            dx = 1/50
+
+            rho_i = self.rho_exp[:,i]
+            u_i = self.ux_exp[:,i]
+            P_i = self.P_exp[:,i]
+
+            U_i = U_(rho_i,u_i,P_i)
+
+            U_i = U_next(U_i,dx,"LW")
+
+            Res = U_a_la_moins_un(U_i)
+            self.rho_exp[:,i] = Res[:,0]
+            self.ux_exp[:,i] = Res[:,1]
+            self.P_exp[:,i] = Res[:,2]
+
+            rho_i = self.rho_exp[i,:]
+            u_i = self.uy_exp[i,:]
+            P_i = self.P_exp[i,:]
+
+            U_i = U_(rho_i,u_i,P_i)
+
+            U_i = U_next(U_i,dx,"LF")
+
+            Res = U_a_la_moins_un(U_i)
+            self.rho_exp[i,:] = Res[:,0]
+            self.ux_exp[i,:] = Res[:,1]
+            self.P_exp[i,:] = Res[:,2]
+
+
+        if self.flag : self.fen.after(1,self.animation_explosion)
 
     def Plotter(self):
 
