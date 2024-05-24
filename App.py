@@ -154,7 +154,7 @@ class Application (Tk):
         X = np.linspace(0,1)
 
         self.frame_graphes_exp = Frame(self.fen, borderwidth =2,padx = 10, pady = 20)
-        self.frame_graphes_exp.grid(row = 1, column =1)
+        self.frame_graphes_exp.grid(row = 1,rowspan = 3, column =1)
 
         self.axes_P_exp = self.fig_exp.add_subplot(title="P [Pa]")
         self.axes_P_exp.set_xlabel("Y [m]")
@@ -181,22 +181,44 @@ class Application (Tk):
         self.axes_P_exp.legend()
         self.flag = False
 
-        Button(self.fen,text="Stop",command=self.stop_exp).grid(row=1,column=2,padx = 20)
+        Button(self.fen,text="Stop",command=self.stop_exp).grid(row=2,column=2,padx = 20)
+        Button(self.fen,text="Reset",command=self.reset_exp).grid(row=3,column=2,padx = 20)
 
 
         self.canvas_exp.get_tk_widget().bind("<Button-1>",self.exploser)
 
+        self.flux_exp = StringVar()
+        self.flux_exp.set("LF")
+
+        self.Frame_flux_exp = LabelFrame(self.fen, text="Méthode de résolution")
+        self.Frame_flux_exp.grid(row=1,column = 2,padx= 20,pady =20)
+
+        Radiobutton(self.Frame_flux_exp,text="Lax Friedrich",value="LF",variable=self.flux_exp).grid(row = 1, column = 1)
+        Radiobutton(self.Frame_flux_exp,text="Lax Wendroff",value="LW",variable=self.flux_exp).grid(row = 2, column = 1)
+
+
     def stop_exp(self):
         self.flag = True
 
+    def reset_exp(self):
+        self.flag = False
+        self.rho_exp = np.ones((50,50))
+        self.ux_exp = np.zeros((50,50))
+        self.uy_exp = np.zeros((50,50))
+        self.P_exp = np.ones((50,50))
+
+        self.axes_P_exp.imshow(self.P_exp,vmin=1,vmax=10,cmap="hot")
+        self.canvas_exp.draw()
     def exploser(self,event):
 
         self.fen.update()
         Lx = int(self.canvas_exp.get_tk_widget()["width"])
         Ly = int(self.canvas_exp.get_tk_widget()["height"])
 
-        x = int(event.x/Lx * 50)
-        y = int(event.y/Ly * 50)
+        print(event.x,event.y)
+
+        y = int(event.x/Lx * 50) 
+        x = int(event.y/Ly * 50) 
 
         xmin= max(0,x-10)
         xmax = min(49,x+10)
@@ -207,8 +229,6 @@ class Application (Tk):
 
         self.P_exp[xmin:xmax,ymin:ymax] +=9 
         #self.P_exp[ymin,ymax] +=9 
-
-        print(self.P_exp,np.max(self.P))
 
         if self.flag == False:
             self.flag = True
@@ -222,7 +242,7 @@ class Application (Tk):
         #fen.after(10)
 
         self.step +=1
-        
+        flux = self.flux_exp.get()
 
         for i in range(50):
             dx = 1/50
@@ -233,7 +253,7 @@ class Application (Tk):
 
             U_i = U_(rho_i,u_i,P_i)
 
-            U_i = U_next(U_i,dx,"LW")
+            U_i = U_next(U_i,dx,flux)
 
             Res = U_a_la_moins_un(U_i)
             self.rho_exp[:,i] = Res[:,0]
@@ -246,7 +266,7 @@ class Application (Tk):
 
             U_i = U_(rho_i,u_i,P_i)
 
-            U_i = U_next(U_i,dx,"LF")
+            U_i = U_next(U_i,dx,flux)
 
             Res = U_a_la_moins_un(U_i)
             self.rho_exp[i,:] = Res[:,0]
