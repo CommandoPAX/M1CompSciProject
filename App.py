@@ -89,7 +89,7 @@ class Application (Tk):
         Radiobutton(self.Frame_flux,text="Lax Friedrich",value="LF",variable=self.flux).grid(row = 1, column = 1)
         Radiobutton(self.Frame_flux,text="Lax Wendroff",value="LW",variable=self.flux).grid(row = 2, column = 1)
         Radiobutton(self.Frame_flux,text="Riemann",value="Riemann",variable=self.flux).grid(row = 3, column = 1)
-        Radiobutton(self.Frame_flux,text="Godunov",value="Godunov",variable=self.flux).grid(row = 4, column = 1)    #Ne fonctionne pas pour l'instant
+        #Radiobutton(self.Frame_flux,text="Godunov",value="Godunov",variable=self.flux).grid(row = 4, column = 1)    #Ne fonctionne pas pour l'instant
 
         self.Frame_config = LabelFrame(self,text="Conditions initiales")
         self.Frame_config.grid(column=2,row=2)
@@ -102,7 +102,7 @@ class Application (Tk):
 
         self.graphes = BooleanVar() 
 
-        Checkbutton(self.Frame_animation, text="Afficher les graphiques",onvalue=True,offvalue=False,variable=self.graphes,command=self.Afficher_graphes).grid(row=1,column=0,pady=5,padx=5,columnspan=2)
+        #Checkbutton(self.Frame_animation, text="Afficher les graphiques",onvalue=True,offvalue=False,variable=self.graphes,command=self.Afficher_graphes).grid(row=1,column=0,pady=5,padx=5,columnspan=2)
         self.graphes.set(True)
 
         Label(self.Frame_animation,text = "Plot toutes les ").grid(row=2,column = 0,padx =0 )
@@ -141,10 +141,13 @@ class Application (Tk):
         self.menubar.add_cascade(label="Options", menu=menu1)
 
         menu2 = Menu(self.menubar, tearoff=0)
-        menu2.add_command(label="Aide")
+        menu2.add_command(label="Aide",command = self.aide)
         self.menubar.add_cascade(label="Aide", menu=menu2)
 
         self.config(menu=self.menubar)
+
+    def aide(self):
+        os.system("gedit README.md")
 
     def explosions(self):
         self.fen = Toplevel(self)
@@ -223,7 +226,7 @@ class Application (Tk):
         ymin= max(0,y-10)
         ymax = min(49,y+10)
 
-        self.step = 0
+        self.step_exp = 0
 
         self.P_exp[xmin:xmax,ymin:ymax] +=9 
         #self.P_exp[ymin,ymax] +=9 
@@ -234,12 +237,12 @@ class Application (Tk):
 
     def animation_explosion(self):
 
-        if self.step % 10 == 0:
+        if self.step_exp % 10 == 0:
             self.axes_P_exp.imshow(self.P_exp,vmin=1,vmax=10,cmap="hot")
             self.canvas_exp.draw()
         #fen.after(10)
 
-        self.step +=1
+        self.step_exp +=1
         flux = self.flux_exp.get()
 
         for i in range(50):
@@ -422,7 +425,7 @@ class Application (Tk):
             Riemann_Sim = Riemann_Solver(self.nom_fichier[:-5])
             Res = Riemann_Sim.Evol(self.T)
 
-        if flux == "Godunov" :
+        """if flux == "Godunov" :   
             dt = delta_t(self.U[:, 1], a_(self.U[:, 2], self.U[:, 0]),dx)
             self.T += dt
 
@@ -466,7 +469,7 @@ class Application (Tk):
             self.P = Res[:,2]
             #self.U= U_(rho_int,u_int,P_int)
             #print(np.shape(self.U))
-            #self.U = U_next(self.U,dx,"Godunov")
+            #self.U = U_next(self.U,dx,"Godunov")"""
 
         self.Conditions_bord()
 
