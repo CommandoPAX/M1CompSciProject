@@ -34,7 +34,7 @@ for j in range(100):
 
         U_i = U_(rho_i,u_i,P_i)
 
-        U_i = U_next(U_i,dx,"LF")
+        U_i = U_next(U_i,dx,"LW")
 
         Res = U_a_la_moins_un(U_i)
         rho[:,i] = Res[:,0]
@@ -53,5 +53,4 @@ for j in range(100):
         rho[i,:] = Res[:,0]
         ux[i,:] = Res[:,1]
         P[i,:] = Res[:,2]
-            
-
+           
