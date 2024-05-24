@@ -2,7 +2,7 @@
 
 ## Installation and configuration
 
-Librairies used : matplotlib, numpy, pandas, pillow
+Librairies used : matplotlib, numpy, pandas, pillow, tkinter
 
 To install the requirements use : `pip install -r requirements.txt` (Python >= 3.9)
 
@@ -11,6 +11,8 @@ To run this program, simply launch the file App.py.
 The initial conditions should be stored in a json file in ./config.
 
 ## Utilisation
+
+Open a configuration file and click "Lancer la simulation"
 
 It is possible to reduce the frequency at which the graphes are updated on the animation to save calculation time.
 
