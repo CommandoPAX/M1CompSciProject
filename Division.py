@@ -13,7 +13,7 @@ def charger (fichier):
     flux = label.split("_")[-2]
     t = label.split("_")[-1][:-4]
 
-    label = flux+", t = "+str(round(float(t),3))+" s"
+    #label = flux+", t = "+str(round(float(t),3))+" s"
 
     P = data["P"].to_numpy()
     u = data["u"].to_numpy()
@@ -21,13 +21,13 @@ def charger (fichier):
 
     return rho, u , P
 
-LF = charger("./output/Sod_Problem/Sod_Problem_LF_0.25027.txt")
+LF = charger("./output/Sod_Problem/Sod_Problem_LF_500cells.txt")
 LW = charger("./output/Sod_Problem/Sod_Problem_LW_0.25046.txt")
 Riemann = charger("./output/Sod_Problem/Sod_Problem_Riemann_0.25.txt")
 
 X = np.linspace(0,1,len(LF[0]))
 
-args = [r"Density ratio",r"Velocity ratio",r"Pressure ratio"]
+args = [r"Density ratio for 500 cells",r"Velocity ratio for 50 cells",r"Pressure ratio for 50 cells"]
 unites = [r"rho [$kg/m^3$]",r"u [$m/s$]",r"P [$Pa$]"]
 for i in range(3):
 
@@ -46,7 +46,7 @@ for i in range(3):
 
     plt.show()
 
-for i in range(3):
+"""for i in range(3):
 
     plt.title(args[i][:-6])
     axes = plt.gca()
@@ -59,4 +59,4 @@ for i in range(3):
 
     plt.legend()
 
-    plt.show()
+    plt.show()"""
